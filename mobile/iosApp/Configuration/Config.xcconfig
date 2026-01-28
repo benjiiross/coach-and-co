@@ -1,0 +1,7 @@
+TEAM_ID=
+
+PRODUCT_NAME=coach-and-co
+PRODUCT_BUNDLE_IDENTIFIER=com.benjiiross.coachandco.coach-and-co$(TEAM_ID)
+
+CURRENT_PROJECT_VERSION=1
+MARKETING_VERSION=1.0
