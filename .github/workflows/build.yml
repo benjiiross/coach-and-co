@@ -11,6 +11,9 @@ jobs:
   build-backend:
     name: Build & Test Backend
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
     steps:
       - uses: actions/checkout@v4
       
@@ -30,6 +33,9 @@ jobs:
   build-android:
     name: Build Android
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mobile
     needs: build-backend
     steps:
       - uses: actions/checkout@v4
