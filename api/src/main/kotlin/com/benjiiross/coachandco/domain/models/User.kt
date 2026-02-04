@@ -1,5 +1,7 @@
 package com.benjiiross.coachandco.domain.models
 
+import com.benjiiross.coachandco.core.enums.Gender
+import com.benjiiross.coachandco.core.enums.UserType
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 

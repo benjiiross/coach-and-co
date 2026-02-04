@@ -1,10 +1,11 @@
-package com.benjiiross.coachandco.data
+package com.benjiiross.coachandco.data.tables
 
-import com.benjiiross.coachandco.constants.DbConstants
-import com.benjiiross.coachandco.domain.models.Gender
-import com.benjiiross.coachandco.domain.models.UserType
+import com.benjiiross.coachandco.core.constants.DbConstants
+import com.benjiiross.coachandco.core.enums.Gender
+import com.benjiiross.coachandco.core.enums.UserType
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.datetime.date
+import org.jetbrains.exposed.v1.datetime.datetime
 
 object UsersTable : Table("users") {
   val id = integer("id").autoIncrement()
@@ -17,6 +18,12 @@ object UsersTable : Table("users") {
   val type =
       enumerationByName("user_type", DbConstants.TYPE_MAX_LENGTH, UserType::class)
           .default(UserType.CLIENT)
+
+  val deletedAt = datetime("deleted_at").nullable()
+
+  init {
+    index(false, deletedAt)
+  }
 
   override val primaryKey = PrimaryKey(id)
 }
