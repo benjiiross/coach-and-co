@@ -1,0 +1,16 @@
+opencollection: 1.0.0
+info:
+  name: "coach-and-co"
+  type: workspace
+
+collections:
+  - name: "Hello World"
+    path: "collections\\Hello World"
+  - name: "User"
+    path: "collections\\User"
+
+specs:
+
+docs: ''
+
+activeEnvironmentUid: 158bcqq00000000000000
