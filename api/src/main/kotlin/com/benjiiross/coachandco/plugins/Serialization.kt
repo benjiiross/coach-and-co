@@ -1,4 +1,4 @@
-package com.benjiiross.coachandco
+package com.benjiiross.coachandco.plugins
 
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application

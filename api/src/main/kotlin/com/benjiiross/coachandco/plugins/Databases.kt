@@ -1,6 +1,7 @@
-package com.benjiiross.coachandco
+package com.benjiiross.coachandco.plugins
 
-import com.benjiiross.coachandco.data.UsersTable
+import com.benjiiross.coachandco.core.config.Env
+import com.benjiiross.coachandco.data.tables.UsersTable
 import io.ktor.server.application.Application
 import io.ktor.server.application.log
 import org.jetbrains.exposed.v1.jdbc.Database

@@ -1,4 +1,4 @@
-package com.benjiiross.coachandco
+package com.benjiiross.coachandco.plugins
 
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod

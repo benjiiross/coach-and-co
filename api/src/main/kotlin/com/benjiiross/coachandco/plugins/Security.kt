@@ -1,7 +1,8 @@
-package com.benjiiross.coachandco
+package com.benjiiross.coachandco.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.benjiiross.coachandco.core.config.Env
 import io.ktor.server.application.Application
 import io.ktor.server.auth.authentication
 import io.ktor.server.auth.jwt.JWTPrincipal

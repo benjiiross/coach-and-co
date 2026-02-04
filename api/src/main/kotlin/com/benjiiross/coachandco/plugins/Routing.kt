@@ -1,4 +1,4 @@
-package com.benjiiross.coachandco
+package com.benjiiross.coachandco.plugins
 
 import com.benjiiross.coachandco.features.user.userRoutes
 import io.ktor.http.HttpStatusCode
