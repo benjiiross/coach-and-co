@@ -8,7 +8,7 @@ import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 class UserRepository {
-  suspend fun createUser(user: User): Int = transaction {
+  fun createUser(user: User): Int = transaction {
     UsersTable.insert {
           it[email] = user.email
           it[name] = user.name
@@ -21,7 +21,7 @@ class UserRepository {
         }[UsersTable.id]
   }
 
-  suspend fun getAllUsers(): List<User> = transaction { UsersTable.selectAll().map { it.toUser() } }
+  fun getAllUsers(): List<User> = transaction { UsersTable.selectAll().map { it.toUser() } }
 
   private fun ResultRow.toUser() =
       User(
