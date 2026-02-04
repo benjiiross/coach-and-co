@@ -1,4 +1,4 @@
-package com.benjiiross.coachandco.constants
+package com.benjiiross.coachandco.core.constants
 
 object DbConstants {
   const val EMAIL_MAX_LENGTH = 255
