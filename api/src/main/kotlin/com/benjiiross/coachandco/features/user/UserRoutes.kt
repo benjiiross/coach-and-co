@@ -23,8 +23,7 @@ fun Route.userRoutes() {
           it[gender] = user.gender
           it[birthday] = user.birthday
           it[phone] = user.phone
-          it[isCoach] = user.isCoach
-          it[isClient] = user.isClient
+          it[type] = user.type
         }
       }
       call.respond(HttpStatusCode.Created)

@@ -16,8 +16,7 @@ class UserRepository {
           it[gender] = user.gender
           it[birthday] = user.birthday
           it[phone] = user.phone
-          it[isCoach] = user.isCoach
-          it[isClient] = user.isClient
+          it[type] = user.type
         }[UsersTable.id]
   }
 
@@ -32,7 +31,6 @@ class UserRepository {
           gender = this[UsersTable.gender],
           birthday = this[UsersTable.birthday],
           phone = this[UsersTable.phone],
-          isCoach = this[UsersTable.isCoach],
-          isClient = this[UsersTable.isClient],
+          type = this[UsersTable.type],
       )
 }

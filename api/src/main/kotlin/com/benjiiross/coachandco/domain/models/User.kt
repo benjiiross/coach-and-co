@@ -9,9 +9,8 @@ data class User(
     val email: String,
     val name: String,
     val surname: String,
-    val gender: String,
+    val gender: Gender,
     val birthday: LocalDate,
     val phone: String,
-    val isCoach: Boolean,
-    val isClient: Boolean,
+    val type: UserType,
 )
