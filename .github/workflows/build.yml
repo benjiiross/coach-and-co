@@ -27,7 +27,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Build & Run Tests API
-        run: ./gradlew :api:build 
+        run: ./gradlew build 
 
   # --- JOB 2: ANDROID ---
   build-android:
@@ -48,16 +48,16 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Run Android Tests
-        run: ./gradlew :mobile:testDebugUnitTest
+        run: ./gradlew testDebugUnitTest
 
       - name: Build Debug APK
-        run: ./gradlew :mobile:assembleDebug
+        run: ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: debug-apk
-          path: mobile/build/outputs/apk/debug/*.apk
+          path: ./build/outputs/apk/debug/*.apk
           retention-days: 7
 
   # --- JOB 3: iOS ---
@@ -79,4 +79,4 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Build iOS Framework
-        run: ./gradlew :mobile:linkDebugFrameworkIosArm64
+        run: ./gradlew linkDebugFrameworkIosArm64
