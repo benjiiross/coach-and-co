@@ -1,0 +1,20 @@
+meta {
+  name: Get User By Email
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{host}}/users/search?email=john@example.com
+  body: none
+  auth: inherit
+}
+
+params:query {
+  email: john@example.com
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

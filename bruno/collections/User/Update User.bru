@@ -1,11 +1,11 @@
 meta {
-  name: Create User
+  name: Update User
   type: http
-  seq: 4
+  seq: 5
 }
 
-post {
-  url: {{host}}/users
+put {
+  url: {{host}}/users/1
   body: json
   auth: inherit
 }
@@ -16,13 +16,13 @@ headers {
 
 body:json {
   {
-    "email": "john.doe@example.com",
-    "name": "John",
+    "email": "john.updated@example.com",
+    "name": "John Updated",
     "surname": "Doe",
     "gender": "MALE",
     "birthday": "1990-05-15",
-    "phone": "+33612345678",
-    "type": "CLIENT"
+    "phone": "+33698765432",
+    "type": "PREMIUM"
   }
 }
 
