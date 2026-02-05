@@ -1,4 +1,4 @@
-package com.benjiiross.coachandco.data.tables
+package com.benjiiross.coachandco.database.tables
 
 import com.benjiiross.coachandco.core.constants.DbConstants
 import com.benjiiross.coachandco.core.enums.Gender
@@ -7,7 +7,7 @@ import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.datetime.date
 import org.jetbrains.exposed.v1.datetime.datetime
 
-object UsersTable : Table("users") {
+object Users : Table("users") {
   val id = integer("id").autoIncrement()
   val email = varchar("email", DbConstants.EMAIL_MAX_LENGTH).uniqueIndex()
   val name = varchar("name", DbConstants.NAME_MAX_LENGTH)

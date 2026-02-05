@@ -2,8 +2,8 @@ package com.benjiiross.coachandco.domain.services
 
 import com.benjiiross.coachandco.core.exceptions.EmailAlreadyTakenException
 import com.benjiiross.coachandco.core.exceptions.ResourceNotFoundException
-import com.benjiiross.coachandco.domain.dto.UserRequest
-import com.benjiiross.coachandco.domain.dto.UserResponse
+import com.benjiiross.coachandco.domain.dto.user.UserRequest
+import com.benjiiross.coachandco.domain.dto.user.UserResponse
 import com.benjiiross.coachandco.domain.mappers.toModel
 import com.benjiiross.coachandco.domain.mappers.toResponse
 import com.benjiiross.coachandco.domain.models.User
@@ -15,7 +15,7 @@ class UserService(private val userRepository: IUserRepository) {
   }
 
   suspend fun getAllUsers(): List<UserResponse> {
-    return userRepository.getAllUsers().map { it.toResponse() }
+    return userRepository.getAllUsers().toResponse()
   }
 
   suspend fun getUserByEmail(email: String): UserResponse {

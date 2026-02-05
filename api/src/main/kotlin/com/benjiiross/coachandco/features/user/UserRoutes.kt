@@ -1,6 +1,6 @@
 package com.benjiiross.coachandco.features.user
 
-import com.benjiiross.coachandco.domain.dto.UserRequest
+import com.benjiiross.coachandco.domain.dto.user.UserRequest
 import com.benjiiross.coachandco.domain.models.User
 import com.benjiiross.coachandco.domain.services.UserService
 import com.benjiiross.coachandco.util.receiveId

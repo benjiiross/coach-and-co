@@ -1,7 +1,7 @@
 package com.benjiiross.coachandco.domain.mappers
 
-import com.benjiiross.coachandco.domain.dto.UserRequest
-import com.benjiiross.coachandco.domain.dto.UserResponse
+import com.benjiiross.coachandco.domain.dto.user.UserRequest
+import com.benjiiross.coachandco.domain.dto.user.UserResponse
 import com.benjiiross.coachandco.domain.models.User
 
 fun User.toResponse(): UserResponse {
@@ -28,3 +28,5 @@ fun UserRequest.toModel(): User =
         phone = this.phone,
         type = this.type,
     )
+
+fun List<User>.toResponse() = map { it.toResponse() }
