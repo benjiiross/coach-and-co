@@ -5,7 +5,9 @@ import com.benjiiross.coachandco.data.tables.softDelete
 import com.benjiiross.coachandco.domain.models.User
 import com.benjiiross.coachandco.domain.repositories.IUserRepository
 import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.isNull
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
@@ -13,15 +15,21 @@ import org.jetbrains.exposed.v1.jdbc.update
 
 class PostgresUserRepository : IUserRepository {
   override suspend fun getAllUsers(): List<User> = transaction {
-    UsersTable.selectAll().map { it.toUser() }
+    UsersTable.selectAll().where { UsersTable.deletedAt.isNull() }.map { it.toUser() }
   }
 
   override suspend fun findById(userId: Int): User? = transaction {
-    UsersTable.selectAll().where { UsersTable.id eq userId }.singleOrNull()?.toUser()
+    UsersTable.selectAll()
+        .where { (UsersTable.id eq userId) and (UsersTable.deletedAt.isNull()) }
+        .singleOrNull()
+        ?.toUser()
   }
 
   override suspend fun findByEmail(email: String): User? = transaction {
-    UsersTable.selectAll().where { UsersTable.email eq email }.singleOrNull()?.toUser()
+    UsersTable.selectAll()
+        .where { (UsersTable.email eq email) and (UsersTable.deletedAt.isNull()) }
+        .singleOrNull()
+        ?.toUser()
   }
 
   override suspend fun createUser(user: User): User = transaction {
