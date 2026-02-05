@@ -1,4 +1,4 @@
-package com.benjiiross.coachandco.domain.dto
+package com.benjiiross.coachandco.domain.dto.user
 
 import com.benjiiross.coachandco.core.enums.Gender
 import com.benjiiross.coachandco.core.enums.UserType
@@ -6,8 +6,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserResponse(
-    val id: Int,
+data class UserRequest(
     val email: String,
     val name: String,
     val surname: String,
@@ -15,5 +14,4 @@ data class UserResponse(
     val birthday: LocalDate,
     val phone: String,
     val type: UserType,
-    val initials: String,
 )

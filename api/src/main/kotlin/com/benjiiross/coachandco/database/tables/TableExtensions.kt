@@ -1,4 +1,4 @@
-package com.benjiiross.coachandco.data.tables
+package com.benjiiross.coachandco.database.tables
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
