@@ -7,6 +7,7 @@ import com.benjiiross.coachandco.plugins.configureMonitoring
 import com.benjiiross.coachandco.plugins.configureRouting
 import com.benjiiross.coachandco.plugins.configureSecurity
 import com.benjiiross.coachandco.plugins.configureSerialization
+import com.benjiiross.coachandco.plugins.configureStatusPages
 import io.ktor.server.application.Application
 
 fun main(args: Array<String>) {
@@ -21,4 +22,5 @@ fun Application.module() {
   configureRouting()
   configureSecurity()
   configureSerialization()
+  configureStatusPages()
 }

@@ -1,5 +1,6 @@
 package com.benjiiross.coachandco.plugins
 
+import com.benjiiross.coachandco.core.exceptions.EmailAlreadyTakenException
 import com.benjiiross.coachandco.core.exceptions.InvalidIdException
 import com.benjiiross.coachandco.core.exceptions.ResourceNotFoundException
 import io.ktor.http.HttpStatusCode
@@ -18,11 +19,12 @@ fun Application.configureStatusPages() {
       call.respond(HttpStatusCode.NotFound, mapOf("error" to cause.message))
     }
 
+    exception<EmailAlreadyTakenException> { call, cause ->
+      call.respond(HttpStatusCode.Conflict, mapOf("error" to cause.message))
+    }
+
     exception<Throwable> { call, cause ->
-      call.respond(
-          HttpStatusCode.InternalServerError,
-          mapOf("error" to "An unknown error happened."),
-      )
+      call.respond(HttpStatusCode.InternalServerError, mapOf("error" to cause.message))
     }
   }
 }
