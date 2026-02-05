@@ -1,6 +1,7 @@
 package com.benjiiross.coachandco.core.config
 
 object Env {
+  val isDevelopment = true
   val dbUrl = System.getenv("DB_URL") ?: "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
   val dbUser = System.getenv("DB_USERNAME") ?: "sa"
   val dbPassword = System.getenv("DB_PASSWORD") ?: "123"

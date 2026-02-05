@@ -1,21 +1,10 @@
 package com.benjiiross.coachandco.plugins
 
-import com.benjiiross.coachandco.core.config.Env
-import com.benjiiross.coachandco.database.tables.Users
+import com.benjiiross.coachandco.database.DatabaseFactory
 import io.ktor.server.application.Application
 import io.ktor.server.application.log
-import org.jetbrains.exposed.v1.jdbc.Database
-import org.jetbrains.exposed.v1.jdbc.SchemaUtils
-import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 fun Application.configureDatabases() {
-  Database.connect(
-      url = Env.dbUrl,
-      user = Env.dbUser,
-      password = Env.dbPassword,
-      driver = Env.dbDriver,
-  )
-  transaction { SchemaUtils.create(Users) }
-
-  log.info("Successfully connected to DB")
+  DatabaseFactory.init()
+  log.info("Database initialized successfully")
 }
