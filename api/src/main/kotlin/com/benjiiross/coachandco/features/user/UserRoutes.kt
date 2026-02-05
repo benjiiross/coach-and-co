@@ -1,7 +1,9 @@
 package com.benjiiross.coachandco.features.user
 
+import com.benjiiross.coachandco.domain.dto.UserRequest
 import com.benjiiross.coachandco.domain.models.User
-import com.benjiiross.coachandco.domain.repositories.IUserRepository
+import com.benjiiross.coachandco.domain.services.UserService
+import com.benjiiross.coachandco.util.receiveId
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
@@ -14,56 +16,53 @@ import io.ktor.server.routing.route
 import org.koin.ktor.ext.inject
 
 fun Route.userRoutes() {
-  val userRepository by inject<IUserRepository>()
+  val userService by inject<UserService>()
 
   route("/users") {
     get {
-      val users = userRepository.getAllUsers()
-      call.respond(HttpStatusCode.OK, users)
+      val email = call.queryParameters["email"]
+
+      val response =
+          if (email != null) {
+            userService.getUserByEmail(email)
+          } else {
+            userService.getAllUsers()
+          }
+
+      call.respond(response)
     }
 
     get("/{id}") {
-      val userId =
-          call.parameters["id"]?.toIntOrNull()
-              ?: return@get call.respond(HttpStatusCode.BadRequest, "Invalid user ID")
+      val userId = call.receiveId()
 
-      val user =
-          userRepository.findById(userId)
-              ?: return@get call.respond(HttpStatusCode.NotFound, "User not found")
+      val result = userService.getUserById(userId)
 
-      call.respond(HttpStatusCode.OK, user)
+      call.respond(result)
     }
 
     post {
-      val user = call.receive<User>()
-      val createdUser = userRepository.createUser(user)
-      call.respond(HttpStatusCode.Created, createdUser)
+      val request = call.receive<UserRequest>()
+
+      val result = userService.registerUser(request = request)
+
+      call.respond(HttpStatusCode.Created, result)
     }
 
     put("/{id}") {
-      val userId =
-          call.parameters["id"]?.toIntOrNull()
-              ?: return@put call.respond(HttpStatusCode.BadRequest, "Invalid user ID")
-
+      val userId = call.receiveId()
       val user = call.receive<User>()
-      val updatedUser =
-          userRepository.updateUser(userId, user)
-              ?: return@put call.respond(HttpStatusCode.NotFound, "User not found")
 
-      call.respond(HttpStatusCode.OK, updatedUser)
+      val result = userService.updateUser(userId, user)
+
+      call.respond(result)
     }
 
     delete("/{id}") {
-      val userId =
-          call.parameters["id"]?.toIntOrNull()
-              ?: return@delete call.respond(HttpStatusCode.BadRequest, "Invalid user ID")
+      val userId = call.receiveId()
 
-      val deleted = userRepository.deleteUser(userId)
-      if (deleted) {
-        call.respond(HttpStatusCode.NoContent)
-      } else {
-        call.respond(HttpStatusCode.NotFound, "User not found")
-      }
+      userService.deleteUser(userId)
+
+      call.respond(HttpStatusCode.NoContent)
     }
   }
 }
