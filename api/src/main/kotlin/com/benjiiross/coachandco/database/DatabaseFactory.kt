@@ -6,7 +6,7 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.jetbrains.exposed.v1.core.Slf4jSqlDebugLogger
+import org.jetbrains.exposed.v1.core.StdOutSqlLogger
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.transactions.suspendTransaction
@@ -54,7 +54,7 @@ object DatabaseFactory {
       withContext(Dispatchers.IO) {
         suspendTransaction {
           if (Env.isDevelopment) {
-            addLogger(Slf4jSqlDebugLogger)
+            addLogger(StdOutSqlLogger)
           }
           block()
         }
