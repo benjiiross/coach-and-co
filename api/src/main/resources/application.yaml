@@ -1,5 +1,4 @@
 ktor:
-  development: true
   application:
     modules:
       - com.benjiiross.coachandco.ApplicationKt.module

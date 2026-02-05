@@ -36,9 +36,8 @@ dependencies {
   implementation(libs.exposed.kotlin.datetime)
   implementation(libs.ktor.server.config.yaml)
   implementation(libs.hikaricp)
+  implementation(libs.jbcrypt)
   testImplementation(libs.ktor.server.test.host)
   testImplementation(libs.kotlin.test.junit)
   testImplementation(libs.mockk)
 }
-
-ktor { development = true }
