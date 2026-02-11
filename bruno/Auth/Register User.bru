@@ -1,11 +1,11 @@
 meta {
-  name: Create User
+  name: Register User
   type: http
-  seq: 4
+  seq: 2
 }
 
 post {
-  url: {{host}}/users
+  url: {{host}}/auth/register
   body: json
   auth: inherit
 }
@@ -17,12 +17,13 @@ headers {
 body:json {
   {
     "email": "john.doe@example.com",
+    "password": "password123",
     "name": "John",
     "surname": "Doe",
     "gender": "MALE",
     "birthday": "1990-05-15",
     "phone": "+33612345678",
-    "type": "CLIENT"
+    "type": "COACH"
   }
 }
 
