@@ -30,21 +30,20 @@ import com.benjiiross.coachandco.presentation.screens.landing.animation.LandingA
 import com.benjiiross.coachandco.presentation.theme.Gaps
 import org.jetbrains.compose.resources.painterResource
 
+private val carouselImages = listOf(
+    Res.drawable.landing_children,
+    Res.drawable.landing_old,
+    Res.drawable.landing_gym,
+    Res.drawable.landing_running,
+    Res.drawable.landing_football,
+    Res.drawable.landing_tennis,
+)
+
 @Composable
 fun ImageCarousel(modifier: Modifier) {
-    val images =
-        listOf(
-            Res.drawable.landing_children,
-            Res.drawable.landing_old,
-            Res.drawable.landing_gym,
-            Res.drawable.landing_running,
-            Res.drawable.landing_football,
-            Res.drawable.landing_tennis,
-        )
+    val pagerState = rememberPagerState(pageCount = { carouselImages.size })
 
-    val pagerState = rememberPagerState(pageCount = { images.size })
-
-    LandingAnimations.AutoScrollEffect(pagerState, images.size)
+    LandingAnimations.AutoScrollEffect(pagerState, carouselImages.size)
 
     Box(modifier = modifier) {
         HorizontalPager(
@@ -54,7 +53,7 @@ fun ImageCarousel(modifier: Modifier) {
             userScrollEnabled = false,
         ) { page ->
             Image(
-                painter = painterResource(images[page]),
+                painter = painterResource(carouselImages[page]),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
@@ -75,7 +74,7 @@ fun ImageCarousel(modifier: Modifier) {
         )
 
         PageIndicator(
-            pageCount = images.size,
+            pageCount = carouselImages.size,
             currentPage = pagerState.currentPage,
             modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = Gaps.L),
         )

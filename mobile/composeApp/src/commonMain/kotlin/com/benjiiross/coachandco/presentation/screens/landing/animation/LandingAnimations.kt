@@ -20,13 +20,13 @@ object LandingAnimations {
         LaunchedEffect(pagerState) {
             while (true) {
                 yield()
-                delay(LandingAnimationConstants.SCROLL_DELAY_DURATION)
+                delay(LandingAnimationConstants.CAROUSEL_AUTO_SCROLL_DELAY)
                 if (pageCount > 0) {
                     pagerState.animateScrollToPage(
                         page = (pagerState.currentPage + 1) % pageCount,
                         animationSpec =
                             tween(
-                                durationMillis = LandingAnimationConstants.SCROLL_DURATION,
+                                durationMillis = LandingAnimationConstants.CAROUSEL_SCROLL_DURATION,
                                 easing = FastOutSlowInEasing,
                             ),
                     )
@@ -44,7 +44,10 @@ object LandingAnimations {
                 animationSpec =
                     infiniteRepeatable(
                         animation =
-                            tween(LandingAnimationConstants.PULSE_DURATION, easing = LinearEasing),
+                            tween(
+                                LandingAnimationConstants.PULSE_ANIMATION_DURATION,
+                                easing = LinearEasing,
+                            ),
                         repeatMode = RepeatMode.Restart,
                     ),
                 label = "Radius",
@@ -62,7 +65,10 @@ object LandingAnimations {
                 animationSpec =
                     infiniteRepeatable(
                         animation =
-                            tween(LandingAnimationConstants.PULSE_DURATION, easing = LinearEasing),
+                            tween(
+                                LandingAnimationConstants.PULSE_ANIMATION_DURATION,
+                                easing = LinearEasing,
+                            ),
                         repeatMode = RepeatMode.Restart,
                     ),
                 label = "Alpha",
