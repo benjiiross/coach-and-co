@@ -5,4 +5,13 @@
     <string name="landing_body_description">La solution simple pour trouver un coach certifié, de 7 à 77 ans.</string>
     <string name="landing_btn_start">Commencer</string>
     <string name="landing_btn_login">Se Connecter</string>
+
+    <!--LOGIN-->
+    <string name="login_greeting">Bon retour !</string>
+    <string name="login_greeting_tagline">Heureux de vous revoir sur Coach &amp; Co.</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Mot de passe</string>
+    <string name="login_forgot">Oublié ?</string>
+    <string name="login_login"><b>Se connecter</b></string>
+    <string name="login_register">Nouveau ici ? <b>S'inscrire</b></string>
 </resources>
