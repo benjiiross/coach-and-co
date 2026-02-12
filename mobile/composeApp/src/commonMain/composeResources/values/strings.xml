@@ -1,3 +1,8 @@
 <resources>
-    <string name="presentation_title">Le sport, pour tous</string>
+    <!--LANDING SCREEN-->
+    <string name="landing_title_app">COACH &amp; CO</string>
+    <string name="landing_display_tagline">LE SPORT POUR TOUS.</string>
+    <string name="landing_body_description">La solution simple pour trouver un coach certifié, de 7 à 77 ans.</string>
+    <string name="landing_btn_start">Commencer</string>
+    <string name="landing_btn_login">Se Connecter</string>
 </resources>

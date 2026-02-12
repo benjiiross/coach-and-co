@@ -22,27 +22,33 @@ import org.jetbrains.compose.resources.stringResource
 fun CoachAndCoButton(
     text: String,
     onClick: () -> Unit,
-    isDarkVariant: Boolean = false,
+    variant: CoachAndCoButtonVariant = CoachAndCoButtonVariant.Primary,
     modifier: Modifier = Modifier,
 ) {
     val colors =
-        if (isDarkVariant) {
-            ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.inverseSurface,
-                contentColor = MaterialTheme.colorScheme.inverseOnSurface,
-            )
-        } else {
-            ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-            )
+        when (variant) {
+            CoachAndCoButtonVariant.Primary ->
+                ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                )
+            CoachAndCoButtonVariant.Dark ->
+                ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.inverseSurface,
+                    contentColor = MaterialTheme.colorScheme.inverseOnSurface,
+                )
+            CoachAndCoButtonVariant.Light ->
+                ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface,
+                )
         }
 
     val border =
-        if (isDarkVariant) {
-            BorderStroke(Gaps.XXS, MaterialTheme.colorScheme.outline)
-        } else {
+        if (variant == CoachAndCoButtonVariant.Primary) {
             null
+        } else {
+            BorderStroke(Gaps.XXS, MaterialTheme.colorScheme.outline)
         }
 
     Button(
@@ -64,15 +70,21 @@ fun CoachAndCoButton(
 fun CoachAndCoButton(
     textRes: StringResource,
     onClick: () -> Unit,
-    isDarkVariant: Boolean = false,
+    variant: CoachAndCoButtonVariant = CoachAndCoButtonVariant.Primary,
     modifier: Modifier = Modifier,
 ) {
     CoachAndCoButton(
         text = stringResource(textRes),
         onClick = onClick,
-        isDarkVariant = isDarkVariant,
+        variant = variant,
         modifier = modifier,
     )
+}
+
+enum class CoachAndCoButtonVariant {
+    Primary,
+    Dark,
+    Light,
 }
 
 @Pixel9aPreview
@@ -80,6 +92,15 @@ fun CoachAndCoButton(
 fun CoachAndCoButtonsPreview() = ThemePreview {
     Column(verticalArrangement = Arrangement.spacedBy(Gaps.SM)) {
         CoachAndCoButton(text = "Primary", onClick = {})
-        CoachAndCoButton(text = "Dark Variant", onClick = {}, isDarkVariant = true)
+        CoachAndCoButton(
+            text = "Light Variant",
+            onClick = {},
+            variant = CoachAndCoButtonVariant.Light,
+        )
+        CoachAndCoButton(
+            text = "Dark Variant",
+            onClick = {},
+            variant = CoachAndCoButtonVariant.Dark,
+        )
     }
 }

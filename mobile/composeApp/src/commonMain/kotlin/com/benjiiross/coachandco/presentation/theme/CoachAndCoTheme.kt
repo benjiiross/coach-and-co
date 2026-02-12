@@ -17,6 +17,11 @@ import coach_and_co.composeapp.generated.resources.inter_medium
 import coach_and_co.composeapp.generated.resources.inter_regular
 import org.jetbrains.compose.resources.Font
 
+@Composable
+fun CoachAndCoTheme(content: @Composable () -> Unit) {
+    MaterialTheme(colorScheme = CoachAndCoColors, typography = interTypography(), content = content)
+}
+
 object Gaps {
     val XXS = 2.dp
     val XS = 4.dp
@@ -70,9 +75,4 @@ private fun interTypography(): Typography {
                 lineHeight = 18.sp,
             ),
     )
-}
-
-@Composable
-fun CoachAndCoTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = CoachAndCoColors, typography = interTypography(), content = content)
 }
