@@ -17,14 +17,24 @@ import coach_and_co.composeapp.generated.resources.montserrat_regular
 import org.jetbrains.compose.resources.Font
 
 object Gaps {
+    val XXS = 2.dp
+    val XS = 4.dp
     val S = 12.dp
     val M = 16.dp
     val L = 24.dp
     val XL = 32.dp
 }
 
-private val AppColors =
-    lightColorScheme()
+private val CoachAndCoColors =
+    lightColorScheme(
+        primary = GreenCoach,
+        onPrimary = WhiteCoach,
+        surface = WhiteCoach,
+        onSurface = BlackCoach,
+        inverseSurface = BlackCoach,
+        inverseOnSurface = WhiteCoach,
+        outline = GreenCoach,
+    )
 
 @Composable
 private fun montserratTypography(): Typography {
@@ -39,12 +49,6 @@ private fun montserratTypography(): Typography {
     return Typography(
         displayLarge =
             TextStyle(fontFamily = montserratFont, fontWeight = FontWeight.Bold, fontSize = 32.sp),
-        headlineLarge =
-            TextStyle(
-                fontFamily = montserratFont,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 28.sp,
-            ),
         titleLarge =
             TextStyle(
                 fontFamily = montserratFont,
@@ -70,5 +74,9 @@ private fun montserratTypography(): Typography {
 
 @Composable
 fun CoachAndCoTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = AppColors, typography = montserratTypography(), content = content)
+    MaterialTheme(
+        colorScheme = CoachAndCoColors,
+        typography = montserratTypography(),
+        content = content,
+    )
 }
