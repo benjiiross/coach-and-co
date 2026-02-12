@@ -91,6 +91,7 @@ Table Workout {
 
   max_participants integer [note: 'NULL for unlimited, required for GROUP']
   current_participants integer [not null, default: 0]
+  price decimal(10,2) [not null]
 
   scheduled_at timestamp [not null]
   duration integer [not null, note: 'Duration in minutes']
@@ -156,7 +157,7 @@ Table Review {
   anonymous bool [not null, default: false]
 
   stars decimal(2,1) [not null, note: 'Between 0.0 and 5.0']
-  comment text
+  comment text // check for bad words, links, maybe do intent analysis
 
   created_at timestamp [not null, default: `now()`]
   edited_at timestamp
