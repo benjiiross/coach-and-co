@@ -1,4 +1,4 @@
-package com.benjiiross.coachandco.presentation.component.button
+package com.benjiiross.coachandco.presentation.components.button
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -10,10 +10,12 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.benjiiross.coachandco.presentation.component.text.CoachAndCoTextTitleSmall
+import com.benjiiross.coachandco.presentation.components.text.CoachAndCoTextTitleSmall
 import com.benjiiross.coachandco.presentation.preview.Pixel9aPreview
 import com.benjiiross.coachandco.presentation.preview.ThemePreview
 import com.benjiiross.coachandco.presentation.theme.Gaps
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -23,18 +25,16 @@ fun CoachAndCoButton(
     isDarkVariant: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
-    val colorScheme = MaterialTheme.colorScheme
-
     val colors =
         if (isDarkVariant) {
             ButtonDefaults.buttonColors(
-                containerColor = colorScheme.inverseSurface,
-                contentColor = colorScheme.inverseOnSurface,
+                containerColor = MaterialTheme.colorScheme.inverseSurface,
+                contentColor = MaterialTheme.colorScheme.inverseOnSurface,
             )
         } else {
             ButtonDefaults.buttonColors(
-                containerColor = colorScheme.primary,
-                contentColor = colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
             )
         }
 
@@ -52,14 +52,33 @@ fun CoachAndCoButton(
         border = border,
         shape = MaterialTheme.shapes.medium,
     ) {
-        CoachAndCoTextTitleSmall(modifier = Modifier.padding(horizontal = Gaps.S, vertical = Gaps.XS), text = text)
+        CoachAndCoTextTitleSmall(
+            text = text,
+            modifier = Modifier.padding(horizontal = Gaps.SM, vertical = Gaps.XS),
+        )
     }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun CoachAndCoButton(
+    textRes: StringResource,
+    onClick: () -> Unit,
+    isDarkVariant: Boolean = false,
+    modifier: Modifier = Modifier,
+) {
+    CoachAndCoButton(
+        text = stringResource(textRes),
+        onClick = onClick,
+        isDarkVariant = isDarkVariant,
+        modifier = modifier,
+    )
 }
 
 @Pixel9aPreview
 @Composable
 fun CoachAndCoButtonsPreview() = ThemePreview {
-    Column(verticalArrangement = Arrangement.spacedBy(Gaps.S)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Gaps.SM)) {
         CoachAndCoButton(text = "Primary", onClick = {})
         CoachAndCoButton(text = "Dark Variant", onClick = {}, isDarkVariant = true)
     }

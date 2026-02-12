@@ -1,4 +1,4 @@
-package com.benjiiross.coachandco.presentation.component.text
+package com.benjiiross.coachandco.presentation.components.text
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -38,7 +38,7 @@ fun CoachAndCoTextDisplay(
     text: String,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
-    textAlign: TextAlign = TextAlign.Center,
+    textAlign: TextAlign = TextAlign.Start,
 ) {
     CoachAndCoBaseText(text, MaterialTheme.typography.displayLarge, modifier, color, textAlign)
 }
@@ -48,7 +48,7 @@ fun CoachAndCoTextDisplay(
     textRes: StringResource,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
-    textAlign: TextAlign = TextAlign.Center,
+    textAlign: TextAlign = TextAlign.Start,
 ) = CoachAndCoTextDisplay(stringResource(textRes), modifier, color, textAlign)
 
 @Composable
@@ -59,7 +59,14 @@ fun CoachAndCoTextTitle(
     textAlign: TextAlign = TextAlign.Start,
     maxLines: Int = Int.MAX_VALUE,
 ) {
-    CoachAndCoBaseText(text, MaterialTheme.typography.titleLarge, modifier, color, textAlign, maxLines)
+    CoachAndCoBaseText(
+        text,
+        MaterialTheme.typography.titleLarge,
+        modifier,
+        color,
+        textAlign,
+        maxLines,
+    )
 }
 
 @Composable
@@ -79,7 +86,14 @@ fun CoachAndCoTextTitleSmall(
     textAlign: TextAlign = TextAlign.Start,
     maxLines: Int = Int.MAX_VALUE,
 ) {
-    CoachAndCoBaseText(text, MaterialTheme.typography.bodyLarge, modifier, color, textAlign, maxLines)
+    CoachAndCoBaseText(
+        text,
+        MaterialTheme.typography.bodyLarge,
+        modifier,
+        color,
+        textAlign,
+        maxLines,
+    )
 }
 
 @Composable
@@ -117,7 +131,14 @@ fun CoachAndCoTextCaption(
     textAlign: TextAlign = TextAlign.Start,
     maxLines: Int = 3,
 ) {
-    CoachAndCoBaseText(text, MaterialTheme.typography.bodySmall, modifier, color, textAlign, maxLines)
+    CoachAndCoBaseText(
+        text,
+        MaterialTheme.typography.bodySmall,
+        modifier,
+        color,
+        textAlign,
+        maxLines,
+    )
 }
 
 @Composable
