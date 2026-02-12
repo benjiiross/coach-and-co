@@ -5,6 +5,8 @@ import com.benjiiross.coachandco.domain.models.User
 interface IUserRepository {
   suspend fun getAllUsers(): List<User>
 
+  suspend fun getDeletedUsers(): List<User>
+
   suspend fun findById(userId: Int): User?
 
   suspend fun findByEmail(email: String): User?

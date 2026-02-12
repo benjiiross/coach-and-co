@@ -4,19 +4,19 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.benjiiross.coachandco.core.config.Env
 import io.ktor.server.application.Application
-import io.ktor.server.auth.authentication
+import io.ktor.server.application.install
+import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
 
 fun Application.configureSecurity() {
-  // Please read the jwt property from the config file if you are using EngineMain
-  val jwtAudience = "jwt-audience"
-  val jwtDomain = "https://jwt-provider-domain/"
-  val jwtRealm = "ktor sample app"
+  val jwtAudience = "coach-and-co-users"
+  val jwtDomain = "https://coach-and-co.com"
   val jwtSecret = Env.jwtSecret
-  authentication {
-    jwt {
-      realm = jwtRealm
+
+  install(Authentication) {
+    jwt("auth-jwt") {
+      realm = "Access to 'me' and private routes"
       verifier(
           JWT.require(Algorithm.HMAC256(jwtSecret))
               .withAudience(jwtAudience)
@@ -24,8 +24,14 @@ fun Application.configureSecurity() {
               .build()
       )
       validate { credential ->
-        if (credential.payload.audience.contains(jwtAudience)) JWTPrincipal(credential.payload)
-        else null
+        val containsAudience = credential.payload.audience.contains(jwtAudience)
+        val hasUserId = credential.payload.getClaim("userId").asInt() != null
+
+        if (containsAudience && hasUserId) {
+          JWTPrincipal(credential.payload)
+        } else {
+          null
+        }
       }
     }
   }

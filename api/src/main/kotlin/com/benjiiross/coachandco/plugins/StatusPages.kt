@@ -1,30 +1,23 @@
 package com.benjiiross.coachandco.plugins
 
-import com.benjiiross.coachandco.core.exceptions.EmailAlreadyTakenException
-import com.benjiiross.coachandco.core.exceptions.InvalidIdException
-import com.benjiiross.coachandco.core.exceptions.ResourceNotFoundException
+import com.benjiiross.coachandco.core.exceptions.AppContextException
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
+import kotlinx.serialization.ExperimentalSerializationApi
 
+@OptIn(ExperimentalSerializationApi::class)
 fun Application.configureStatusPages() {
   install(StatusPages) {
-    exception<InvalidIdException> { call, cause ->
-      call.respond(HttpStatusCode.BadRequest, mapOf("error" to cause.message))
-    }
-
-    exception<ResourceNotFoundException> { call, cause ->
-      call.respond(HttpStatusCode.NotFound, mapOf("error" to cause.message))
-    }
-
-    exception<EmailAlreadyTakenException> { call, cause ->
-      call.respond(HttpStatusCode.Conflict, mapOf("error" to cause.message))
+    exception<AppContextException> { call, cause ->
+      call.respond(cause.statusCode, "An unknown error happened")
     }
 
     exception<Throwable> { call, cause ->
-      call.respond(HttpStatusCode.InternalServerError, mapOf("error" to cause.message))
+      call.respond(HttpStatusCode.InternalServerError, "An unknown error happened")
+      cause.printStackTrace()
     }
   }
 }

@@ -15,12 +15,12 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-  configureDatabases()
   configureFrameworks()
+  configureSecurity()
+  configureDatabases()
   configureHTTP()
   configureMonitoring()
-  configureRouting()
-  configureSecurity()
   configureSerialization()
   configureStatusPages()
+  configureRouting()
 }

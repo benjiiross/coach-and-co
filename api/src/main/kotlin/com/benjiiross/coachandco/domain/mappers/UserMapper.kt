@@ -21,6 +21,7 @@ fun User.toResponse(): UserResponse {
 fun UserRequest.toModel(): User =
     User(
         email = this.email,
+        passwordHash = this.password,
         name = this.name,
         surname = this.surname,
         gender = this.gender,

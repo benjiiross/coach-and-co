@@ -6,5 +6,7 @@ object Env {
   val dbUser = System.getenv("DB_USERNAME") ?: "sa"
   val dbPassword = System.getenv("DB_PASSWORD") ?: "123"
   val dbDriver = System.getenv("DB_DRIVER") ?: "org.h2.Driver"
-  val jwtSecret = System.getenv("JWT_SECRET") ?: ""
+  val jwtSecret = System.getenv("JWT_SECRET") ?: "secret"
+  val jwtIssuer = System.getenv("JWT_ISSUER") ?: "https://jwt-issuer.com"
+  val jwtAudience = System.getenv("JWT_AUDIENCE") ?: "audience"
 }

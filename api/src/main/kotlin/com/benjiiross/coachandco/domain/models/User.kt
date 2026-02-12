@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 data class User(
     val id: Int? = null,
     val email: String,
+    val passwordHash: String,
     val name: String,
     val surname: String,
     val gender: Gender,

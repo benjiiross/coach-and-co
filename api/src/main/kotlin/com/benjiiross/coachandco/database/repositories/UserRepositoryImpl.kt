@@ -8,6 +8,7 @@ import com.benjiiross.coachandco.domain.repositories.IUserRepository
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.isNotNull
 import org.jetbrains.exposed.v1.core.isNull
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
@@ -16,6 +17,10 @@ import org.jetbrains.exposed.v1.jdbc.update
 class UserRepositoryImpl : IUserRepository {
   override suspend fun getAllUsers(): List<User> = dbQuery {
     Users.selectAll().where { Users.deletedAt.isNull() }.map { it.toUser() }
+  }
+
+  override suspend fun getDeletedUsers(): List<User> = dbQuery {
+    Users.selectAll().where { Users.deletedAt.isNotNull() }.map { it.toUser() }
   }
 
   override suspend fun findById(userId: Int): User? = dbQuery {
@@ -36,6 +41,7 @@ class UserRepositoryImpl : IUserRepository {
     val id =
         Users.insert {
               it[email] = user.email
+              it[passwordHash] = user.passwordHash
               it[name] = user.name
               it[surname] = user.surname
               it[gender] = user.gender
@@ -71,6 +77,7 @@ class UserRepositoryImpl : IUserRepository {
       User(
           id = this[Users.id],
           email = this[Users.email],
+          passwordHash = this[Users.passwordHash],
           name = this[Users.name],
           surname = this[Users.surname],
           gender = this[Users.gender],

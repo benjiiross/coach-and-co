@@ -23,6 +23,10 @@ class UserService(private val userRepository: IUserRepository) {
         ?: throw ResourceNotFoundException("User")
   }
 
+  suspend fun getDeletedUsers(): List<UserResponse> {
+    return userRepository.getDeletedUsers().toResponse()
+  }
+
   suspend fun registerUser(request: UserRequest): UserResponse {
     val existing = userRepository.findByEmail(request.email)
     if (existing != null) throw EmailAlreadyTakenException()

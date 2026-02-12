@@ -10,6 +10,7 @@ import org.jetbrains.exposed.v1.datetime.datetime
 object Users : Table("users") {
   val id = integer("id").autoIncrement()
   val email = varchar("email", DbConstants.EMAIL_MAX_LENGTH).uniqueIndex()
+  val passwordHash = varchar("password", DbConstants.PASSWORD_HASH_MAX_LENGTH)
   val name = varchar("name", DbConstants.NAME_MAX_LENGTH)
   val surname = varchar("surname", DbConstants.NAME_MAX_LENGTH)
   val gender = enumerationByName("gender", DbConstants.GENDER_MAX_LENGTH, Gender::class)

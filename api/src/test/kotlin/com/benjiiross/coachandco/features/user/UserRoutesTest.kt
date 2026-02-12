@@ -1,5 +1,6 @@
 package com.benjiiross.coachandco.features.user
 
+import com.benjiiross.coachandco.features.userRoutes
 import com.benjiiross.coachandco.plugins.configureSerialization
 import com.benjiiross.coachandco.plugins.configureStatusPages
 import io.ktor.client.request.get
