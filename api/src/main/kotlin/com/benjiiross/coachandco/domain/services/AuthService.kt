@@ -22,7 +22,7 @@ import kotlin.time.Clock
 class AuthService(
     private val userRepository: UserRepository,
     private val jwtSecret: String,
-    private val jwtIssuer: String,
+    private val jwtDomain: String,
     private val jwtAudience: String,
 ) {
     fun generateToken(userId: Int): String {
@@ -33,7 +33,7 @@ class AuthService(
 
         return JWT.create()
             .withAudience(jwtAudience)
-            .withIssuer(jwtIssuer)
+            .withIssuer(jwtDomain)
             .withClaim("userId", userId)
             .withExpiresAt(expiresAt)
             .sign(Algorithm.HMAC256(jwtSecret))

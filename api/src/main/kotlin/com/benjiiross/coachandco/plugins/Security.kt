@@ -2,17 +2,17 @@ package com.benjiiross.coachandco.plugins
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.benjiiross.coachandco.core.config.Env
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
+import io.ktor.server.config.ApplicationConfig
 
-fun Application.configureSecurity() {
-  val jwtAudience = ""
-  val jwtDomain = ""
-  val jwtSecret = ""
+fun Application.configureSecurity(config: ApplicationConfig) {
+  val jwtAudience = config.propertyOrNull("jwt.audience")!!.getString()
+  val jwtDomain = config.propertyOrNull("jwt.domain")!!.getString()
+  val jwtSecret = config.propertyOrNull("jwt.secret")!!.getString()
 
   install(Authentication) {
     jwt("auth-jwt") {
