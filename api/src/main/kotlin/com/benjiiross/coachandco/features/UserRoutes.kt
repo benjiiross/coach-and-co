@@ -1,7 +1,7 @@
 package com.benjiiross.coachandco.features
 
 import com.benjiiross.coachandco.core.exceptions.ForbiddenException
-import com.benjiiross.coachandco.domain.models.User
+import com.benjiiross.coachandco.domain.model.User
 import com.benjiiross.coachandco.domain.services.UserService
 import com.benjiiross.coachandco.util.receiveId
 import io.ktor.http.HttpStatusCode

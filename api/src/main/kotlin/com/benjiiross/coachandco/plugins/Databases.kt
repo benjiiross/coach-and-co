@@ -1,6 +1,6 @@
 package com.benjiiross.coachandco.plugins
 
-import com.benjiiross.coachandco.database.DatabaseFactory
+import com.benjiiross.coachandco.data.database.DatabaseFactory
 import io.ktor.server.application.Application
 import io.ktor.server.application.log
 

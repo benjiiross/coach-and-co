@@ -9,12 +9,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coach_and_co.composeapp.generated.resources.Res
-import coach_and_co.composeapp.generated.resources.inter_black
-import coach_and_co.composeapp.generated.resources.inter_bold
-import coach_and_co.composeapp.generated.resources.inter_extra_bold
-import coach_and_co.composeapp.generated.resources.inter_medium
-import coach_and_co.composeapp.generated.resources.inter_regular
+import coach_and_co.mobile.composeapp.generated.resources.Res
+import coach_and_co.mobile.composeapp.generated.resources.inter_black
+import coach_and_co.mobile.composeapp.generated.resources.inter_bold
+import coach_and_co.mobile.composeapp.generated.resources.inter_extra_bold
+import coach_and_co.mobile.composeapp.generated.resources.inter_medium
+import coach_and_co.mobile.composeapp.generated.resources.inter_regular
 import org.jetbrains.compose.resources.Font
 
 @Composable

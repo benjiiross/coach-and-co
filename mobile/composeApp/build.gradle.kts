@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.kotlinPluginSerialization)
+    alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktfmt)
 }
@@ -26,6 +26,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
+            implementation(project(":shared"))
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
@@ -40,6 +41,10 @@ kotlin {
             implementation(libs.koin.androidx.compose)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
         }
         commonTest.dependencies { implementation(libs.kotlin.test) }
     }
@@ -64,7 +69,9 @@ android {
     }
 }
 
-dependencies { debugImplementation(libs.compose.uiTooling) }
+dependencies {
+    debugImplementation(libs.compose.uiTooling)
+}
 
 detekt {
     toolVersion = libs.versions.detekt.get()

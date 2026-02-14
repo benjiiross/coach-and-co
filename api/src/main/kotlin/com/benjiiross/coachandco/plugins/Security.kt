@@ -10,9 +10,9 @@ import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
 
 fun Application.configureSecurity() {
-  val jwtAudience = "coach-and-co-users"
-  val jwtDomain = "https://coach-and-co.com"
-  val jwtSecret = Env.jwtSecret
+  val jwtAudience = ""
+  val jwtDomain = ""
+  val jwtSecret = ""
 
   install(Authentication) {
     jwt("auth-jwt") {

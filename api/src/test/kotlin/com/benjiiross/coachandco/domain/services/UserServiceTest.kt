@@ -1,12 +1,12 @@
 package com.benjiiross.coachandco.domain.services
 
-import com.benjiiross.coachandco.core.enums.Gender
-import com.benjiiross.coachandco.core.enums.UserType
+import com.benjiiross.coachandco.domain.enums.Gender
+import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.core.exceptions.EmailAlreadyTakenException
 import com.benjiiross.coachandco.core.exceptions.ResourceNotFoundException
 import com.benjiiross.coachandco.domain.dto.user.UserRequest
-import com.benjiiross.coachandco.domain.models.User
-import com.benjiiross.coachandco.domain.repositories.IUserRepository
+import com.benjiiross.coachandco.domain.model.User
+import com.benjiiross.coachandco.domain.repository.UserRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -17,7 +17,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDate
 
 class UserServiceTest {
-  private val repo = mockk<IUserRepository>()
+  private val repo = mockk<UserRepository>()
   private val service = UserService(repo)
 
   private fun createMockUser(id: Int? = 1) =

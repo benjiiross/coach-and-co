@@ -16,21 +16,30 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import coach_and_co.composeapp.generated.resources.Res
-import coach_and_co.composeapp.generated.resources.login_email
-import coach_and_co.composeapp.generated.resources.login_greeting
-import coach_and_co.composeapp.generated.resources.login_greeting_tagline
-import coach_and_co.composeapp.generated.resources.login_login
-import coach_and_co.composeapp.generated.resources.login_password
-import coach_and_co.composeapp.generated.resources.login_register
+import coach_and_co.mobile.composeapp.generated.resources.Res
+import coach_and_co.mobile.composeapp.generated.resources.error_invalid_credentials
+import coach_and_co.mobile.composeapp.generated.resources.error_network
+import coach_and_co.mobile.composeapp.generated.resources.error_server
+import coach_and_co.mobile.composeapp.generated.resources.error_unauthorized
+import coach_and_co.mobile.composeapp.generated.resources.error_unknown
+import coach_and_co.mobile.composeapp.generated.resources.login_email
+import coach_and_co.mobile.composeapp.generated.resources.login_greeting
+import coach_and_co.mobile.composeapp.generated.resources.login_greeting_tagline
+import coach_and_co.mobile.composeapp.generated.resources.login_login
+import coach_and_co.mobile.composeapp.generated.resources.login_password
+import coach_and_co.mobile.composeapp.generated.resources.login_register
+import com.benjiiross.coachandco.core.StringResource
 import com.benjiiross.coachandco.presentation.components.button.CoachAndCoButton
 import com.benjiiross.coachandco.presentation.components.button.CoachAndCoButtonVariant
 import com.benjiiross.coachandco.presentation.components.text.CoachAndCoTextBody
@@ -39,6 +48,7 @@ import com.benjiiross.coachandco.presentation.components.textfield.CoachAndCoTex
 import com.benjiiross.coachandco.presentation.preview.Pixel9aPreview
 import com.benjiiross.coachandco.presentation.preview.ThemePreview
 import com.benjiiross.coachandco.presentation.theme.Gaps
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -46,17 +56,42 @@ fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel(),
     innerPadding: PaddingValues,
     onNavigateRegister: () -> Unit,
+    onLoginSuccess: () -> Unit,
+    snackbarHostState: SnackbarHostState,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    LoginContent(
-        uiState = uiState,
-        onEmailChange = viewModel::onEmailChange,
-        onPasswordChange = viewModel::onPasswordChange,
-        onLogin = viewModel::login,
-        innerPadding = innerPadding,
-        onNavigateRegister = onNavigateRegister,
-    )
+    LaunchedEffect(uiState.isSuccess) {
+        if (uiState.isSuccess) {
+            onLoginSuccess()
+        }
+    }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val errorMessage = uiState.error?.toDisplayString()
+
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let { message ->
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
+            )
+            viewModel.clearError()
+        }
+    }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { _ ->
+        LoginContent(
+            uiState = uiState,
+            onEmailChange = viewModel::onEmailChange,
+            onPasswordChange = viewModel::onPasswordChange,
+            onLogin = viewModel::login,
+            innerPadding = innerPadding,
+            onNavigateRegister = onNavigateRegister,
+        )
+    }
 }
 
 @Composable
@@ -122,10 +157,32 @@ private fun LoginContent(
     }
 }
 
+@Composable
+private fun StringResource.toDisplayString(): String {
+    return when (this) {
+        is StringResource.Text -> value
+        is StringResource.ResourceId -> {
+            val stringRes = when (key) {
+                "error_invalid_credentials" -> Res.string.error_invalid_credentials
+                "error_network" -> Res.string.error_network
+                "error_server" -> Res.string.error_server
+                "error_unauthorized" -> Res.string.error_unauthorized
+                "error_unknown" -> Res.string.error_unknown
+                else -> Res.string.error_unknown
+            }
+            stringResource(stringRes)
+        }
+    }
+}
+
 @Pixel9aPreview
 @Composable
 fun LoginScreenPreview() {
     ThemePreview {
-        LoginScreen(innerPadding = PaddingValues(), onNavigateRegister = {})
+        LoginScreen(
+            innerPadding = PaddingValues(),
+            onNavigateRegister = {},
+            onLoginSuccess = {},
+            snackbarHostState = remember { SnackbarHostState() })
     }
 }

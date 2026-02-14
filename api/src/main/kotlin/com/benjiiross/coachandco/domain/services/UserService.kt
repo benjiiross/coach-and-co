@@ -2,14 +2,13 @@ package com.benjiiross.coachandco.domain.services
 
 import com.benjiiross.coachandco.core.exceptions.EmailAlreadyTakenException
 import com.benjiiross.coachandco.core.exceptions.ResourceNotFoundException
-import com.benjiiross.coachandco.domain.dto.user.UserRequest
-import com.benjiiross.coachandco.domain.dto.user.UserResponse
-import com.benjiiross.coachandco.domain.mappers.toModel
-import com.benjiiross.coachandco.domain.mappers.toResponse
-import com.benjiiross.coachandco.domain.models.User
-import com.benjiiross.coachandco.domain.repositories.IUserRepository
+import com.benjiiross.coachandco.mappers.toModel
+import com.benjiiross.coachandco.mappers.toResponse
+import com.benjiiross.coachandco.domain.model.User
+import com.benjiiross.coachandco.domain.repository.UserRepository
+import com.benjiiross.coachandco.dto.auth.UserResponse
 
-class UserService(private val userRepository: IUserRepository) {
+class UserService(private val userRepository: UserRepository) {
   suspend fun getUserById(id: Int): UserResponse {
     return userRepository.findById(id)?.toResponse() ?: throw ResourceNotFoundException("User")
   }
@@ -27,7 +26,7 @@ class UserService(private val userRepository: IUserRepository) {
     return userRepository.getDeletedUsers().toResponse()
   }
 
-  suspend fun registerUser(request: UserRequest): UserResponse {
+  suspend fun registerUser(request: User): UserResponse {
     val existing = userRepository.findByEmail(request.email)
     if (existing != null) throw EmailAlreadyTakenException()
 

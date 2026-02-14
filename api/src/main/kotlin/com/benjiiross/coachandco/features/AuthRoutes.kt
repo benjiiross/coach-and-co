@@ -1,10 +1,10 @@
 package com.benjiiross.coachandco.features
 
-import com.benjiiross.coachandco.domain.dto.auth.AuthResponse
-import com.benjiiross.coachandco.domain.dto.auth.LoginRequest
-import com.benjiiross.coachandco.domain.dto.user.UserRequest
-import com.benjiiross.coachandco.domain.mappers.toResponse
+import com.benjiiross.coachandco.mappers.toResponse
 import com.benjiiross.coachandco.domain.services.AuthService
+import com.benjiiross.coachandco.dto.auth.AuthResponse
+import com.benjiiross.coachandco.dto.auth.LoginRequest
+import com.benjiiross.coachandco.dto.auth.RegisterRequest
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.jwt.JWTPrincipal
@@ -21,24 +21,38 @@ fun Route.authRoutes() {
   val authService by inject<AuthService>()
 
   route("/auth") {
-    post("/login") {
-      val request = call.receive<LoginRequest>()
+      post("/login") {
+          val request = call.receive<LoginRequest>()
 
-      val user = authService.login(request.email, request.password)
-      val token = authService.generateToken(requireNotNull(user.id))
+          val user = authService.login(request.email, request.password)
+          val token = authService.generateToken(requireNotNull(user.id))
 
-      call.respond(AuthResponse(token = token, user = user.toResponse()))
-    }
+          call.respond(
+              HttpStatusCode.OK,
+              AuthResponse(
+                  token = token,
+                  user = user.toResponse()
+              )
+          )
+      }
+
+      post("/register") {
+          val request = call.receive<RegisterRequest>()
+
+          val user = authService.register(request)
+          val token = authService.generateToken(requireNotNull(user.id))
+
+          call.respond(
+              HttpStatusCode.OK,
+              AuthResponse(
+                  token = token,
+                  user = user.toResponse()
+              )
+          )
+
+      }
 
     post("/logout") { call.respond(HttpStatusCode.OK, mapOf("message" to "Logged out")) }
-
-    post("/register") {
-      val request = call.receive<UserRequest>()
-
-      val response = authService.register(request)
-
-      call.respond(HttpStatusCode.Created, response)
-    }
 
     authenticate("auth-jwt") {
       get("/me") {

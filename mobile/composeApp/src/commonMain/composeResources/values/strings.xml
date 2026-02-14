@@ -14,4 +14,11 @@
     <string name="login_forgot">Oublié ?</string>
     <string name="login_login"><b>Se connecter</b></string>
     <string name="login_register">Nouveau ici ? <b>S'inscrire</b></string>
+
+    <!-- Error Messages -->
+    <string name="error_invalid_credentials">Email ou mot de passe incorrect</string>
+    <string name="error_network">Erreur réseau. Vérifiez votre connexion</string>
+    <string name="error_server">Erreur serveur. Réessayez plus tard</string>
+    <string name="error_unauthorized">Accès non autorisé</string>
+    <string name="error_unknown">Une erreur inattendue s\'est produite</string>
 </resources>

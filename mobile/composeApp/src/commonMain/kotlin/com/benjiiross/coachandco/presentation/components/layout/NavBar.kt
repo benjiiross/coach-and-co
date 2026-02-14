@@ -20,8 +20,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import coach_and_co.composeapp.generated.resources.Res
-import coach_and_co.composeapp.generated.resources.logo
+import coach_and_co.mobile.composeapp.generated.resources.Res
+import coach_and_co.mobile.composeapp.generated.resources.logo
 import com.benjiiross.coachandco.presentation.theme.Gaps
 import org.jetbrains.compose.resources.painterResource
 

@@ -3,6 +3,7 @@ package com.benjiiross.coachandco.presentation.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.benjiiross.coachandco.presentation.components.layout.CoachAndCoScaffold
+import com.benjiiross.coachandco.presentation.screens.home.HomeScreen
 import com.benjiiross.coachandco.presentation.screens.landing.LandingScreen
 import com.benjiiross.coachandco.presentation.screens.login.LoginScreen
 import com.benjiiross.coachandco.presentation.screens.login.LoginViewModel
@@ -19,12 +20,18 @@ fun NavGraphBuilder.router(navigationManager: NavigationManager) {
     composable<Route.Auth.Login> {
         val viewModel = koinViewModel<LoginViewModel>()
 
-        CoachAndCoScaffold(onExit = navigationManager::navigateBack) { innerPadding ->
+        CoachAndCoScaffold(onExit = navigationManager::navigateBack) { innerPadding, snackbarHostState ->
             LoginScreen(
                 viewModel = viewModel,
                 innerPadding = innerPadding,
+                snackbarHostState = snackbarHostState,
                 onNavigateRegister = { navigationManager.navigateTo(Route.Auth.Register) },
+                onLoginSuccess = {navigationManager.navigateTo(Route.Main.Home)},
             )
         }
+    }
+
+    composable<Route.Main.Home> {
+        HomeScreen()
     }
 }

@@ -4,12 +4,15 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.benjiiross.coachandco.presentation.components.text.CoachAndCoTextTitleSmall
 import com.benjiiross.coachandco.presentation.preview.Pixel9aPreview
 import com.benjiiross.coachandco.presentation.preview.ThemePreview
@@ -24,6 +27,8 @@ fun CoachAndCoButton(
     onClick: () -> Unit,
     variant: CoachAndCoButtonVariant = CoachAndCoButtonVariant.Primary,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    isLoading: Boolean = false,
 ) {
     val colors =
         when (variant) {
@@ -54,14 +59,23 @@ fun CoachAndCoButton(
     Button(
         onClick = onClick,
         modifier = modifier,
+        enabled = enabled && !isLoading,
         colors = colors,
         border = border,
         shape = MaterialTheme.shapes.medium,
     ) {
-        CoachAndCoTextTitleSmall(
-            text = text,
-            modifier = Modifier.padding(horizontal = Gaps.SM, vertical = Gaps.XS),
-        )
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(Gaps.L),
+                color = MaterialTheme.colorScheme.onPrimary,
+                strokeWidth = 2.dp
+            )
+        } else {
+            CoachAndCoTextTitleSmall(
+                text = text,
+                modifier = Modifier.padding(horizontal = Gaps.SM, vertical = Gaps.XS),
+            )
+        }
     }
 }
 
@@ -72,12 +86,16 @@ fun CoachAndCoButton(
     onClick: () -> Unit,
     variant: CoachAndCoButtonVariant = CoachAndCoButtonVariant.Primary,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    isLoading: Boolean = false,
 ) {
     CoachAndCoButton(
         text = stringResource(textRes),
         onClick = onClick,
         variant = variant,
         modifier = modifier,
+        enabled = enabled,
+        isLoading = isLoading,
     )
 }
 
