@@ -10,6 +10,11 @@ database:
   url:
   username:
   password:
+  maximumPoolSize:
+  minimumIdle:
+  idleTimeout:
+  connectionTimeout:
+  maxLifetime:
 
 jwt:
   secret:

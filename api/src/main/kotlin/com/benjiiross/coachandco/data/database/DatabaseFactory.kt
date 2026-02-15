@@ -4,6 +4,7 @@ import com.benjiiross.coachandco.data.database.tables.Users
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.server.config.ApplicationConfig
+import io.ktor.util.reflect.TypeInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.v1.core.StdOutSqlLogger
@@ -35,11 +36,11 @@ object DatabaseFactory {
                 username = config.property("database.username").getString()
                 password = config.property("database.password").getString()
 
-                maximumPoolSize = 10
-                minimumIdle = 2
-                idleTimeout = 600_000
-                connectionTimeout = 30_000
-                maxLifetime = 1_800_000
+                maximumPoolSize = config.property("database.maximumPoolSize").getString().toInt()
+                minimumIdle = config.property("database.minimumIdle").getString().toInt()
+                idleTimeout = config.property("database.idleTimeout").getString().toLong()
+                connectionTimeout = config.property("database.connectionTimeout").getString().toLong()
+                maxLifetime = config.property("database.maxLifetime").getString().toLong()
 
                 isAutoCommit = false
                 transactionIsolation = "TRANSACTION_READ_COMMITTED"
