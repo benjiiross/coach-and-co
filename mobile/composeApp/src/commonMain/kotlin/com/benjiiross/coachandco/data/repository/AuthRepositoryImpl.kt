@@ -1,22 +1,27 @@
 package com.benjiiross.coachandco.data.repository
 
 import com.benjiiross.coachandco.core.Result
+import com.benjiiross.coachandco.domain.enums.Gender
+import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.domain.error.AuthError
 import com.benjiiross.coachandco.domain.repository.AuthRepository
 import com.benjiiross.coachandco.dto.auth.AuthResponse
 import com.benjiiross.coachandco.dto.auth.LoginRequest
 import com.benjiiross.coachandco.dto.auth.RegisterRequest
 import com.benjiiross.coachandco.dto.error.ApiErrorResponse
+import com.benjiiross.coachandco.routes.Api
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
+import io.ktor.client.plugins.resources.post
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
+import kotlinx.datetime.LocalDate
 
 class AuthRepositoryImpl(
     private val client: HttpClient,
@@ -24,7 +29,7 @@ class AuthRepositoryImpl(
 ) : AuthRepository {
     override suspend fun login(authDetails: LoginRequest): Result<AuthResponse, AuthError> {
         return try {
-            val response: HttpResponse = client.post("$baseUrl/auth/login") {
+            val response: HttpResponse = client.post(Api.Auth.Login()) {
                 contentType(ContentType.Application.Json)
                 setBody(LoginRequest(email = authDetails.email, password = authDetails.password))
             }

@@ -1,6 +1,6 @@
 package com.benjiiross.coachandco.plugins
 
-import com.benjiiross.coachandco.data.repositories.UserRepositoryImpl
+import com.benjiiross.coachandco.data.repository.UserRepositoryImpl
 import com.benjiiross.coachandco.domain.repository.UserRepository
 import com.benjiiross.coachandco.domain.services.AuthService
 import com.benjiiross.coachandco.domain.services.UserService

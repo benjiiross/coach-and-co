@@ -50,7 +50,6 @@ fun ImageCarousel(modifier: Modifier) {
             state = pagerState,
             modifier = Modifier.fillMaxSize(),
             beyondViewportPageCount = 1,
-            userScrollEnabled = false,
         ) { page ->
             Image(
                 painter = painterResource(carouselImages[page]),

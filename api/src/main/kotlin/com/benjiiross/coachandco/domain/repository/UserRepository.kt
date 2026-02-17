@@ -2,6 +2,7 @@ package com.benjiiross.coachandco.domain.repository
 
 import com.benjiiross.coachandco.domain.model.User
 
+
 interface UserRepository {
   suspend fun getAllUsers(): List<User>
 

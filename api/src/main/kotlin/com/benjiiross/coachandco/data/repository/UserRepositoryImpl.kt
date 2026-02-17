@@ -1,4 +1,4 @@
-package com.benjiiross.coachandco.data.repositories
+package com.benjiiross.coachandco.data.repository
 
 import com.benjiiross.coachandco.data.database.DatabaseFactory.dbQuery
 import com.benjiiross.coachandco.data.database.tables.Users

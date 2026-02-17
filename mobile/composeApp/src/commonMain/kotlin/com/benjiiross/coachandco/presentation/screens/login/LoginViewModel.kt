@@ -39,7 +39,7 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
             _uiState.update { it.copy(isLoading = true, error = null) }
 
             val result = authRepository.login(
-                LoginRequest(
+                authDetails = LoginRequest(
                 email = _uiState.value.email.trim(),
                 password = _uiState.value.password
             ))
