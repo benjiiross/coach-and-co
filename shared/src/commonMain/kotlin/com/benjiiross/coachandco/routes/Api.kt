@@ -23,5 +23,9 @@ class Api {
         @Resource("/me")
         @Serializable
         class Me(val parent: Auth = Auth())
+
+        @Resource("/refresh")
+        @Serializable
+        class Refresh(val parent: Auth = Auth())
     }
 }

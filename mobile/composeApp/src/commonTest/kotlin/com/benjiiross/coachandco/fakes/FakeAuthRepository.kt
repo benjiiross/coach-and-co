@@ -10,7 +10,9 @@ import com.benjiiross.coachandco.dto.auth.RegisterRequest
 class FakeAuthRepository : AuthRepository {
     var loginResult: Outcome<AuthResponse, AuthError> = Outcome.Failure(AuthError.Unknown("not set"))
     var registerResult: Outcome<AuthResponse, AuthError> = Outcome.Failure(AuthError.Unknown("not set"))
+    var refreshTokenResult: Outcome<AuthResponse, AuthError> = Outcome.Failure(AuthError.Unknown("not set"))
     var loginCallCount = 0
+    var refreshCallCount = 0
 
     override suspend fun login(authDetails: LoginRequest): Outcome<AuthResponse, AuthError> {
         loginCallCount++
@@ -18,4 +20,9 @@ class FakeAuthRepository : AuthRepository {
     }
 
     override suspend fun register(user: RegisterRequest): Outcome<AuthResponse, AuthError> = registerResult
+
+    override suspend fun refreshToken(token: String): Outcome<AuthResponse, AuthError> {
+        refreshCallCount++
+        return refreshTokenResult
+    }
 }

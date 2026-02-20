@@ -10,4 +10,6 @@ interface AuthRepository {
     suspend fun login(authDetails: LoginRequest): Outcome<AuthResponse, AuthError>
 
     suspend fun register(user: RegisterRequest): Outcome<AuthResponse, AuthError>
+
+    suspend fun refreshToken(token: String): Outcome<AuthResponse, AuthError>
 }

@@ -12,6 +12,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
+import com.benjiiross.coachandco.dto.auth.RefreshRequest
 import io.ktor.client.plugins.resources.post
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -100,6 +101,25 @@ class AuthRepositoryImpl(
             when (e.response.status) {
                 HttpStatusCode.Conflict -> Outcome.Failure(AuthError.InvalidCredentials)
                 else -> Outcome.Failure(AuthError.Unknown(e.message))
+            }
+        } catch (_: ServerResponseException) {
+            Outcome.Failure(AuthError.ServerError)
+        } catch (_: Exception) {
+            Outcome.Failure(AuthError.NetworkError)
+        }
+    }
+
+    override suspend fun refreshToken(token: String): Outcome<AuthResponse, AuthError> {
+        return try {
+            val response: HttpResponse = client.post(Api.Auth.Refresh()) {
+                contentType(ContentType.Application.Json)
+                setBody(RefreshRequest(token))
+            }
+            when (response.status) {
+                HttpStatusCode.OK -> Outcome.Success(response.body<AuthResponse>())
+                HttpStatusCode.Unauthorized -> Outcome.Failure(AuthError.Unauthorized)
+                HttpStatusCode.InternalServerError -> Outcome.Failure(AuthError.ServerError)
+                else -> Outcome.Failure(AuthError.Unknown("Unknown error occurred"))
             }
         } catch (_: ServerResponseException) {
             Outcome.Failure(AuthError.ServerError)

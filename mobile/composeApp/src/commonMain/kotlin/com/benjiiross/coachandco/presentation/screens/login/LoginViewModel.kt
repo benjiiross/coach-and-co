@@ -49,6 +49,7 @@ class LoginViewModel(
             result
                 .onSuccess { authResponse ->
                     tokenStorage.saveToken(authResponse.token)
+                    authResponse.refreshToken?.let { tokenStorage.saveRefreshToken(it) }
                     _uiState.update {
                         it.copy(
                             isLoading = false,
