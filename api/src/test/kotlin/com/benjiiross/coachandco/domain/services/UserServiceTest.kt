@@ -4,7 +4,6 @@ import com.benjiiross.coachandco.domain.enums.Gender
 import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.core.exceptions.EmailAlreadyTakenException
 import com.benjiiross.coachandco.core.exceptions.ResourceNotFoundException
-import com.benjiiross.coachandco.domain.dto.user.UserRequest
 import com.benjiiross.coachandco.domain.model.User
 import com.benjiiross.coachandco.domain.repository.UserRepository
 import io.mockk.coEvery
@@ -24,19 +23,9 @@ class UserServiceTest {
       User(
           id = id,
           email = "test@example.com",
-          name = "John",
-          surname = "Doe",
-          gender = Gender.MALE,
-          birthday = LocalDate(1990, 1, 1),
-          phone = "0600000000",
-          type = UserType.CLIENT,
-      )
-
-  private fun createMockUserRequest() =
-      UserRequest(
-          email = "test@example.com",
-          name = "John",
-          surname = "Doe",
+          passwordHash = "1234",
+          firstName = "John",
+          lastName = "Doe",
           gender = Gender.MALE,
           birthday = LocalDate(1990, 1, 1),
           phone = "0600000000",
@@ -63,7 +52,7 @@ class UserServiceTest {
 
   @Test
   fun `registerUser should throw EmailAlreadyTakenException if email exists`() = runTest {
-    val request = createMockUserRequest()
+    val request = createMockUser()
     val existingUser = createMockUser()
 
     coEvery { repo.findByEmail(request.email) } returns existingUser
@@ -78,5 +67,79 @@ class UserServiceTest {
     coEvery { repo.deleteUser(any()) } returns false
 
     assertFailsWith<ResourceNotFoundException> { service.deleteUser(1) }
+  }
+
+  @Test
+  fun `deleteUser should succeed when repo returns true`() = runTest {
+    coEvery { repo.deleteUser(1) } returns true
+
+    service.deleteUser(1) // should not throw
+  }
+
+  @Test
+  fun `getAllUsers returns mapped list`() = runTest {
+    coEvery { repo.getAllUsers() } returns listOf(createMockUser(1), createMockUser(2))
+
+    val result = service.getAllUsers()
+
+    assertEquals(2, result.size)
+    assertEquals("test@example.com", result[0].email)
+  }
+
+  @Test
+  fun `getAllUsers returns empty list when no users`() = runTest {
+    coEvery { repo.getAllUsers() } returns emptyList()
+
+    assertEquals(emptyList(), service.getAllUsers())
+  }
+
+  @Test
+  fun `getUserByEmail returns UserResponse when user exists`() = runTest {
+    coEvery { repo.findByEmail("test@example.com") } returns createMockUser()
+
+    val result = service.getUserByEmail("test@example.com")
+
+    assertEquals("test@example.com", result.email)
+  }
+
+  @Test
+  fun `getUserByEmail throws ResourceNotFoundException when not found`() = runTest {
+    coEvery { repo.findByEmail(any()) } returns null
+
+    assertFailsWith<ResourceNotFoundException> {
+      service.getUserByEmail("missing@example.com")
+    }
+  }
+
+  @Test
+  fun `updateUser returns updated UserResponse`() = runTest {
+    val mockUser = createMockUser()
+    coEvery { repo.updateUser(1, mockUser) } returns mockUser
+
+    val result = service.updateUser(1, mockUser)
+
+    assertEquals("test@example.com", result.email)
+  }
+
+  @Test
+  fun `updateUser throws ResourceNotFoundException when user not found`() = runTest {
+    val mockUser = createMockUser()
+    coEvery { repo.updateUser(any(), any()) } returns null
+
+    assertFailsWith<ResourceNotFoundException> {
+      service.updateUser(99, mockUser)
+    }
+  }
+
+  @Test
+  fun `registerUser creates user when email is not taken`() = runTest {
+    val request = createMockUser(id = null)
+    coEvery { repo.findByEmail(request.email) } returns null
+    coEvery { repo.createUser(any()) } returns createMockUser(id = 5)
+
+    val result = service.registerUser(request)
+
+    assertEquals(5, result.id)
+    assertEquals("test@example.com", result.email)
   }
 }
