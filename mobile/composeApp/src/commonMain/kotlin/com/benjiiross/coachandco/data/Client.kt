@@ -26,6 +26,6 @@ val client = HttpClient(CIO) {
     }
 
     defaultRequest {
-        url("http://192.168.10.16:8080")
+        url(ApiConfig.URL)
     }
 }
