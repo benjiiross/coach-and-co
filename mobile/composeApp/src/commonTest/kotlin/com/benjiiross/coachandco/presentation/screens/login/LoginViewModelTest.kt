@@ -74,6 +74,36 @@ class LoginViewModelTest {
         }
     }
 
+    // ── Validation ────────────────────────────────────────────────────────────
+
+    @Test
+    fun `login emits error message when email is blank`() = runTest {
+        viewModel.messages.test {
+            viewModel.login()
+            assertIs<UiMessage.Error>(awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `login emits error message when password is blank`() = runTest {
+        viewModel.messages.test {
+            viewModel.onEmailChange("user@test.com")
+            viewModel.login()
+            assertIs<UiMessage.Error>(awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `login does not call api when validation fails`() = runTest {
+        viewModel.login()
+
+        assertEquals(0, fakeRepo.loginCallCount)
+    }
+
+    // ── Login ─────────────────────────────────────────────────────────────────
+
     @Test
     fun `login sets isSuccess to true on success`() = runTest {
         fakeRepo.loginResult = Outcome.Success(fakeAuthResponse)
@@ -94,6 +124,8 @@ class LoginViewModelTest {
         val tokenStorage = TokenStorage(settings)
         viewModel = LoginViewModel(fakeRepo, tokenStorage)
 
+        viewModel.onEmailChange("user@test.com")
+        viewModel.onPasswordChange("password")
         viewModel.login()
 
         assertEquals(fakeAuthResponse.token, tokenStorage.getToken())
@@ -104,6 +136,8 @@ class LoginViewModelTest {
         fakeRepo.loginResult = Outcome.Failure(AuthError.InvalidCredentials)
 
         viewModel.messages.test {
+            viewModel.onEmailChange("user@test.com")
+            viewModel.onPasswordChange("password")
             viewModel.login()
             val message = awaitItem()
             assertIs<UiMessage.Error>(message)
@@ -116,6 +150,8 @@ class LoginViewModelTest {
         fakeRepo.loginResult = Outcome.Failure(AuthError.NetworkError)
 
         viewModel.messages.test {
+            viewModel.onEmailChange("user@test.com")
+            viewModel.onPasswordChange("password")
             viewModel.login()
             val message = awaitItem()
             assertIs<UiMessage.Error>(message)
@@ -128,6 +164,8 @@ class LoginViewModelTest {
         fakeRepo.loginResult = Outcome.Failure(AuthError.ServerError)
 
         viewModel.messages.test {
+            viewModel.onEmailChange("user@test.com")
+            viewModel.onPasswordChange("password")
             viewModel.login()
             val message = awaitItem()
             assertIs<UiMessage.Error>(message)

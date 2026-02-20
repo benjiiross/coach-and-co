@@ -35,6 +35,8 @@ class LoginViewModel(
 
     fun login() {
         viewModelScope.launch {
+            if (!validate()) return@launch
+
             _uiState.update { it.copy(isLoading = true) }
 
             val result = authRepository.login(
@@ -58,6 +60,21 @@ class LoginViewModel(
                     _uiState.update { it.copy(isLoading = false) }
                     _messages.emit(UiMessage.Error(error.toMessage()))
                 }
+        }
+    }
+
+    private suspend fun validate(): Boolean {
+        val state = _uiState.value
+        return when {
+            state.email.isBlank() -> {
+                _messages.emit(UiMessage.Error("L'email est requis"))
+                false
+            }
+            state.password.isBlank() -> {
+                _messages.emit(UiMessage.Error("Le mot de passe est requis"))
+                false
+            }
+            else -> true
         }
     }
 }
