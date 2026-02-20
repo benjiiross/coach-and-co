@@ -2,7 +2,6 @@ package com.benjiiross.coachandco.domain.services
 
 import com.benjiiross.coachandco.core.exceptions.EmailAlreadyTakenException
 import com.benjiiross.coachandco.core.exceptions.ResourceNotFoundException
-import com.benjiiross.coachandco.mappers.toModel
 import com.benjiiross.coachandco.mappers.toResponse
 import com.benjiiross.coachandco.domain.model.User
 import com.benjiiross.coachandco.domain.repository.UserRepository

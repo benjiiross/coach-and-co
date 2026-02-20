@@ -1,8 +1,6 @@
 package com.benjiiross.coachandco.data.repository
 
 import com.benjiiross.coachandco.core.Outcome
-import com.benjiiross.coachandco.domain.enums.Gender
-import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.domain.error.AuthError
 import com.benjiiross.coachandco.domain.repository.AuthRepository
 import com.benjiiross.coachandco.dto.auth.AuthResponse
@@ -55,7 +53,7 @@ class AuthRepositoryImpl(
         } catch (e: ClientRequestException) {
             when (e.response.status) {
                 HttpStatusCode.Unauthorized -> Outcome.Failure(AuthError.InvalidCredentials)
-                else -> Outcome.Failure(AuthError.Unknown(e.message ?: "Request failed"))
+                else -> Outcome.Failure(AuthError.Unknown(e.message))
             }
         } catch (e: ServerResponseException) {
             Outcome.Failure(AuthError.ServerError)
@@ -93,7 +91,7 @@ class AuthRepositoryImpl(
                     try {
                         val errorResponse = response.body<ApiErrorResponse>()
                         Outcome.Failure(AuthError.Unknown(errorResponse.message))
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         Outcome.Failure(AuthError.Unknown("Unknown error occurred"))
                     }
                 }
@@ -101,11 +99,11 @@ class AuthRepositoryImpl(
         } catch (e: ClientRequestException) {
             when (e.response.status) {
                 HttpStatusCode.Conflict -> Outcome.Failure(AuthError.InvalidCredentials)
-                else -> Outcome.Failure(AuthError.Unknown(e.message ?: "Request failed"))
+                else -> Outcome.Failure(AuthError.Unknown(e.message))
             }
-        } catch (e: ServerResponseException) {
+        } catch (_: ServerResponseException) {
             Outcome.Failure(AuthError.ServerError)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Outcome.Failure(AuthError.NetworkError)
         }
     }
