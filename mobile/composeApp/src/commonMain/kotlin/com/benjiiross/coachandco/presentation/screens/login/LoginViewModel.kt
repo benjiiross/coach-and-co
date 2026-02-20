@@ -48,6 +48,7 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 .onSuccess { authResponse ->
                     _uiState.update {
                         it.copy(
+                            userId = authResponse.user.id,
                             isLoading = false,
                             isSuccess = true,
                             error = null
@@ -72,6 +73,7 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
 }
 
 data class LoginUiState(
+    val userId: Int = 0,
     val email: String = "",
     val password: String = "",
     val isLoading: Boolean = false,
