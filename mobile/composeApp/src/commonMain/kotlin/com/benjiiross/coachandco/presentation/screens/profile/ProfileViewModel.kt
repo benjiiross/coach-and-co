@@ -8,8 +8,12 @@ import com.benjiiross.coachandco.domain.repository.ProfileRepository
 import com.benjiiross.coachandco.dto.auth.UserResponse
 import com.benjiiross.coachandco.dto.profile.ProfileError
 import com.benjiiross.coachandco.dto.profile.UpdateProfileRequest
+import com.benjiiross.coachandco.presentation.UiMessage
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -19,10 +23,8 @@ data class ProfileUiState(
     val isLoading: Boolean = false,
     val isSaving: Boolean = false,
     val profile: UserResponse? = null,
-    val error: String? = null,
-    val saveSuccess: Boolean = false,
+    val loadError: String? = null,
 
-    // Editable fields
     val firstName: String = "",
     val lastName: String = "",
     val gender: Gender? = null,
@@ -32,7 +34,6 @@ data class ProfileUiState(
     val newPassword: String = "",
     val confirmPassword: String = "",
 
-    // Validation errors
     val firstNameError: String? = null,
     val lastNameError: String? = null,
     val birthdayError: String? = null,
@@ -46,13 +47,16 @@ class ProfileViewModel(
     private val _uiState = MutableStateFlow(ProfileUiState(isLoading = true))
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
+    private val _messages = MutableSharedFlow<UiMessage>()
+    val messages: SharedFlow<UiMessage> = _messages.asSharedFlow()
+
     init {
         loadProfile()
     }
 
     fun loadProfile() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
+            _uiState.update { it.copy(isLoading = true, loadError = null) }
 
             when (val result = profileRepository.getProfile()) {
                 is Outcome.Success -> {
@@ -71,14 +75,12 @@ class ProfileViewModel(
                 }
                 is Outcome.Failure -> {
                     _uiState.update {
-                        it.copy(isLoading = false, error = result.error.toMessage())
+                        it.copy(isLoading = false, loadError = result.error.toMessage())
                     }
                 }
             }
         }
     }
-
-    // ─── Field updates ────────────────────────────────────────────────────────
 
     fun onFirstNameChange(value: String) =
         _uiState.update { it.copy(firstName = value, firstNameError = null) }
@@ -104,17 +106,12 @@ class ProfileViewModel(
     fun onConfirmPasswordChange(value: String) =
         _uiState.update { it.copy(confirmPassword = value, passwordError = null) }
 
-    fun onSnackbarConsumed() =
-        _uiState.update { it.copy(saveSuccess = false, error = null) }
-
-    // ─── Save ─────────────────────────────────────────────────────────────────
-
     fun saveProfile() {
         if (!validate()) return
 
         val state = _uiState.value
         viewModelScope.launch {
-            _uiState.update { it.copy(isSaving = true, error = null) }
+            _uiState.update { it.copy(isSaving = true) }
 
             val request = UpdateProfileRequest(
                 firstName = state.firstName.trim(),
@@ -133,23 +130,20 @@ class ProfileViewModel(
                         it.copy(
                             isSaving = false,
                             profile = p,
-                            saveSuccess = true,
                             currentPassword = "",
                             newPassword = "",
                             confirmPassword = "",
                         )
                     }
+                    _messages.emit(UiMessage.Success("Profil mis à jour"))
                 }
                 is Outcome.Failure -> {
-                    _uiState.update {
-                        it.copy(isSaving = false, error = result.error.toMessage())
-                    }
+                    _uiState.update { it.copy(isSaving = false) }
+                    _messages.emit(UiMessage.Error(result.error.toMessage()))
                 }
             }
         }
     }
-
-    // ─── Validation ───────────────────────────────────────────────────────────
 
     private fun validate(): Boolean {
         val state = _uiState.value
@@ -187,8 +181,6 @@ class ProfileViewModel(
         return firstNameError == null && lastNameError == null &&
             birthdayError == null && passwordError == null
     }
-
-    // ─── Error mapping ────────────────────────────────────────────────────────
 
     private fun ProfileError.toMessage(): String = when (this) {
         is ProfileError.Unauthorized -> "Session expirée, veuillez vous reconnecter"

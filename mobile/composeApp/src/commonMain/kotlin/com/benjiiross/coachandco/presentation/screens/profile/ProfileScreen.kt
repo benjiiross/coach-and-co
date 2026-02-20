@@ -13,8 +13,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.benjiiross.coachandco.domain.enums.Gender
+import com.benjiiross.coachandco.presentation.UiMessage
 import com.benjiiross.coachandco.presentation.components.button.CoachAndCoButton
 import com.benjiiross.coachandco.presentation.components.button.CoachAndCoButtonVariant
+import com.benjiiross.coachandco.presentation.components.layout.AppMessageBanner
 import com.benjiiross.coachandco.presentation.components.text.CoachAndCoTextBody
 import com.benjiiross.coachandco.presentation.components.text.CoachAndCoTextCaption
 import com.benjiiross.coachandco.presentation.components.text.CoachAndCoTextTitle
@@ -23,74 +25,57 @@ import com.benjiiross.coachandco.presentation.components.textfield.CoachAndCoTex
 import com.benjiiross.coachandco.presentation.profile.ProfileUiState
 import com.benjiiross.coachandco.presentation.profile.ProfileViewModel
 import com.benjiiross.coachandco.presentation.theme.Gaps
-import org.koin.compose.viewmodel.koinViewModel
-
-// ─── Entry point (wired in router) ────────────────────────────────────────────
-
-@Composable
-fun ProfileRoute(
-    onLogout: () -> Unit,
-    snackbarHostState: SnackbarHostState,
-    innerPadding: PaddingValues,
-) {
-    val viewModel = koinViewModel<ProfileViewModel>()
-    ProfileScreen(
-        viewModel = viewModel,
-        snackbarHostState = snackbarHostState,
-        innerPadding = innerPadding,
-        onLogout = onLogout,
-    )
-}
-
-// ─── Screen ───────────────────────────────────────────────────────────────────
+import kotlinx.coroutines.delay
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
-    snackbarHostState: SnackbarHostState,
     innerPadding: PaddingValues,
     onLogout: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var currentMessage by remember { mutableStateOf<UiMessage?>(null) }
 
-    LaunchedEffect(uiState.saveSuccess) {
-        if (uiState.saveSuccess) {
-            snackbarHostState.showSnackbar("Profil mis à jour ✓")
-            viewModel.onSnackbarConsumed()
-        }
-    }
-    LaunchedEffect(uiState.error) {
-        uiState.error?.let {
-            snackbarHostState.showSnackbar(it)
-            viewModel.onSnackbarConsumed()
+    LaunchedEffect(viewModel) {
+        viewModel.messages.collect { message ->
+            currentMessage = message
+            delay(3000L)
+            currentMessage = null
         }
     }
 
-    when {
-        uiState.isLoading -> ProfileLoadingState(innerPadding)
-        uiState.profile == null && uiState.error != null -> ProfileErrorState(
-            message = uiState.error ?: "Erreur inconnue",
-            onRetry = viewModel::loadProfile,
-            innerPadding = innerPadding,
-        )
-        else -> ProfileContent(
-            uiState = uiState,
-            innerPadding = innerPadding,
-            onFirstNameChange = viewModel::onFirstNameChange,
-            onLastNameChange = viewModel::onLastNameChange,
-            onGenderChange = viewModel::onGenderChange,
-            onBirthdayChange = viewModel::onBirthdayChange,
-            onPhoneChange = viewModel::onPhoneChange,
-            onCurrentPasswordChange = viewModel::onCurrentPasswordChange,
-            onNewPasswordChange = viewModel::onNewPasswordChange,
-            onConfirmPasswordChange = viewModel::onConfirmPasswordChange,
-            onSave = viewModel::saveProfile,
-            onLogout = onLogout,
+    Box(modifier = Modifier.fillMaxSize()) {
+        when {
+            uiState.isLoading -> ProfileLoadingState(innerPadding)
+            uiState.profile == null && uiState.loadError != null -> ProfileErrorState(
+                message = uiState.loadError ?: "Erreur inconnue",
+                onRetry = viewModel::loadProfile,
+                innerPadding = innerPadding,
+            )
+            else -> ProfileContent(
+                uiState = uiState,
+                innerPadding = innerPadding,
+                onFirstNameChange = viewModel::onFirstNameChange,
+                onLastNameChange = viewModel::onLastNameChange,
+                onGenderChange = viewModel::onGenderChange,
+                onBirthdayChange = viewModel::onBirthdayChange,
+                onPhoneChange = viewModel::onPhoneChange,
+                onCurrentPasswordChange = viewModel::onCurrentPasswordChange,
+                onNewPasswordChange = viewModel::onNewPasswordChange,
+                onConfirmPasswordChange = viewModel::onConfirmPasswordChange,
+                onSave = viewModel::saveProfile,
+                onLogout = onLogout,
+            )
+        }
+
+        AppMessageBanner(
+            message = currentMessage,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = innerPadding.calculateTopPadding() + Gaps.SM),
         )
     }
 }
-
-// ─── Content ──────────────────────────────────────────────────────────────────
 
 @Composable
 private fun ProfileContent(
@@ -115,7 +100,6 @@ private fun ProfileContent(
             .padding(horizontal = Gaps.M, vertical = Gaps.L),
         verticalArrangement = Arrangement.spacedBy(Gaps.M),
     ) {
-        // ── Header ──────────────────────────────────────────────────────────
         ProfileHeader(
             firstName = uiState.firstName,
             lastName = uiState.lastName,
@@ -124,7 +108,6 @@ private fun ProfileContent(
 
         HorizontalDivider()
 
-        // ── Section : Identité ───────────────────────────────────────────────
         ProfileSectionTitle(title = "Informations personnelles")
 
         Row(
@@ -178,7 +161,6 @@ private fun ProfileContent(
 
         HorizontalDivider()
 
-        // ── Section : Mot de passe ───────────────────────────────────────────
         ProfileSectionTitle(title = "Changer le mot de passe")
 
         CoachAndCoTextField(
@@ -213,7 +195,6 @@ private fun ProfileContent(
 
         Spacer(modifier = Modifier.height(Gaps.SM))
 
-        // ── Actions ──────────────────────────────────────────────────────────
         CoachAndCoButton(
             text = "Enregistrer les modifications",
             onClick = onSave,
@@ -229,8 +210,6 @@ private fun ProfileContent(
         )
     }
 }
-
-// ─── Gender dropdown ──────────────────────────────────────────────────────────
 
 private fun Gender.label(): String = when (this) {
     Gender.MALE -> "Homme"
@@ -286,8 +265,6 @@ private fun GenderDropdown(
     }
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
 @Composable
 private fun ProfileHeader(
     firstName: String,
@@ -337,8 +314,6 @@ private fun ProfileSectionTitle(title: String) {
         modifier = Modifier.padding(top = Gaps.XS),
     )
 }
-
-// ─── Loading / Error states ───────────────────────────────────────────────────
 
 @Composable
 private fun ProfileLoadingState(innerPadding: PaddingValues) {
