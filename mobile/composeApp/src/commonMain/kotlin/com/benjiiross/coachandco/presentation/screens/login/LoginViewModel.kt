@@ -2,81 +2,77 @@ package com.benjiiross.coachandco.presentation.screens.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.benjiiross.coachandco.core.StringResource
+import com.benjiiross.coachandco.data.TokenStorage
+import com.benjiiross.coachandco.domain.error.AuthError
 import com.benjiiross.coachandco.domain.repository.AuthRepository
 import com.benjiiross.coachandco.dto.auth.LoginRequest
-import com.benjiiross.coachandco.dto.auth.RegisterRequest
+import com.benjiiross.coachandco.presentation.UiMessage
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-private val emailAddressRegex =
-    Regex(
-        "[a-zA-Z0-9+._%\\-]{1,256}" +
-            "@" +
-            "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-            "(" +
-            "\\." +
-            "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-            ")+"
-    )
-
-class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
+class LoginViewModel(
+    private val authRepository: AuthRepository,
+    private val tokenStorage: TokenStorage,
+) : ViewModel() {
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState = _uiState.asStateFlow()
 
+    private val _messages = MutableSharedFlow<UiMessage>()
+    val messages: SharedFlow<UiMessage> = _messages.asSharedFlow()
+
     fun onEmailChange(email: String) {
-        _uiState.update { it.copy(email = email, error = null) }
+        _uiState.update { it.copy(email = email) }
     }
 
     fun onPasswordChange(password: String) {
-        _uiState.update { it.copy(password = password, error = null) }
+        _uiState.update { it.copy(password = password) }
     }
 
     fun login() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
+            _uiState.update { it.copy(isLoading = true) }
 
             val result = authRepository.login(
                 authDetails = LoginRequest(
-                email = _uiState.value.email.trim(),
-                password = _uiState.value.password
-            ))
+                    email = _uiState.value.email.trim(),
+                    password = _uiState.value.password
+                )
+            )
 
             result
                 .onSuccess { authResponse ->
+                    tokenStorage.saveToken(authResponse.token)
                     _uiState.update {
                         it.copy(
-                            userId = authResponse.user.id,
                             isLoading = false,
                             isSuccess = true,
-                            error = null
                         )
                     }
                 }
                 .onFailure { error ->
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            isSuccess = false,
-                            error = error.toStringResource()
-                        )
-                    }
+                    _uiState.update { it.copy(isLoading = false) }
+                    _messages.emit(UiMessage.Error(error.toMessage()))
                 }
         }
-    }
-
-    fun clearError() {
-        _uiState.update { it.copy(error = null) }
     }
 }
 
 data class LoginUiState(
-    val userId: Int = 0,
     val email: String = "",
     val password: String = "",
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,
-    val error: StringResource? = null,
 )
+
+private fun AuthError.toMessage(): String = when (this) {
+    is AuthError.InvalidCredentials -> "Email ou mot de passe incorrect"
+    is AuthError.NetworkError -> "Pas de connexion réseau"
+    is AuthError.ServerError -> "Erreur serveur, réessayez plus tard"
+    is AuthError.Unauthorized -> "Session expirée, veuillez vous reconnecter"
+    is AuthError.Unknown -> message
+}

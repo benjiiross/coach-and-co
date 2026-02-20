@@ -6,10 +6,11 @@ import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.resources.Resources
+import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-val client = HttpClient(CIO) {
+fun createClient(tokenStorage: TokenStorage) = HttpClient(CIO) {
     install(Resources)
     install(ContentNegotiation) {
         json(Json {
@@ -27,5 +28,8 @@ val client = HttpClient(CIO) {
 
     defaultRequest {
         url(ApiConfig.URL)
+        tokenStorage.getToken()?.let {
+            headers.append(HttpHeaders.Authorization, "Bearer $it")
+        }
     }
 }

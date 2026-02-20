@@ -81,6 +81,10 @@ class AuthRepositoryImpl(
                     Outcome.Failure(AuthError.InvalidCredentials)
                 }
 
+                HttpStatusCode.Conflict -> {
+                    Outcome.Failure(AuthError.InvalidCredentials)
+                }
+
                 HttpStatusCode.InternalServerError -> {
                     Outcome.Failure(AuthError.ServerError)
                 }
