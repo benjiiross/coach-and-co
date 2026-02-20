@@ -12,6 +12,7 @@ class FakeAuthRepository : AuthRepository {
     var registerResult: Outcome<AuthResponse, AuthError> = Outcome.Failure(AuthError.Unknown("not set"))
     var refreshTokenResult: Outcome<AuthResponse, AuthError> = Outcome.Failure(AuthError.Unknown("not set"))
     var loginCallCount = 0
+    var registerCallCount = 0
     var refreshCallCount = 0
 
     override suspend fun login(authDetails: LoginRequest): Outcome<AuthResponse, AuthError> {
@@ -19,7 +20,10 @@ class FakeAuthRepository : AuthRepository {
         return loginResult
     }
 
-    override suspend fun register(user: RegisterRequest): Outcome<AuthResponse, AuthError> = registerResult
+    override suspend fun register(user: RegisterRequest): Outcome<AuthResponse, AuthError> {
+        registerCallCount++
+        return registerResult
+    }
 
     override suspend fun refreshToken(token: String): Outcome<AuthResponse, AuthError> {
         refreshCallCount++

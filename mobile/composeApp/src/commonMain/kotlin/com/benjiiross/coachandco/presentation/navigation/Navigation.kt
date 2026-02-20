@@ -10,15 +10,30 @@ import com.benjiiross.coachandco.presentation.screens.home.HomeScreen
 import com.benjiiross.coachandco.presentation.screens.landing.LandingScreen
 import com.benjiiross.coachandco.presentation.screens.login.LoginScreen
 import com.benjiiross.coachandco.presentation.screens.login.LoginViewModel
+import com.benjiiross.coachandco.presentation.screens.register.RegisterScreen
+import com.benjiiross.coachandco.presentation.screens.register.RegisterViewModel
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 fun NavGraphBuilder.router(navigationManager: NavigationManager) {
     composable<Route.Landing> {
         LandingScreen(
-            onNavigateRegister = {},
+            onNavigateRegister = { navigationManager.navigateTo(Route.Auth.Register) },
             onNavigateLogin = { navigationManager.navigateTo(Route.Auth.Login) },
         )
+    }
+
+    composable<Route.Auth.Register> {
+        val viewModel = koinViewModel<RegisterViewModel>()
+
+        CoachAndCoScaffold(onExit = navigationManager::navigateBack) { innerPadding ->
+            RegisterScreen(
+                viewModel = viewModel,
+                innerPadding = innerPadding,
+                onNavigateLogin = { navigationManager.navigateTo(Route.Auth.Login) },
+                onRegisterSuccess = { navigationManager.navigateTo(Route.Main.Profile) },
+            )
+        }
     }
 
     composable<Route.Auth.Login> {
