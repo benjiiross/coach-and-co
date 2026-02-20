@@ -3,12 +3,12 @@ package com.benjiiross.coachandco.core
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class Result<out T, out E> {
+sealed class Outcome<out T, out E> {
     @Serializable
-    data class Success<out T>(val value: T) : Result<T, Nothing>()
+    data class Success<out T>(val value: T) : Outcome<T, Nothing>()
 
     @Serializable
-    data class Failure<out E>(val error: E) : Result<Nothing, E>()
+    data class Failure<out E>(val error: E) : Outcome<Nothing, E>()
 
     val isSuccess: Boolean get() = this is Success
     val isFailure: Boolean get() = this is Failure
@@ -23,17 +23,17 @@ sealed class Result<out T, out E> {
         is Failure -> error
     }
 
-    inline fun <R> map(transform: (T) -> R): Result<R, E> = when (this) {
+    inline fun <R> map(transform: (T) -> R): Outcome<R, E> = when (this) {
         is Success -> Success(transform(value))
         is Failure -> this
     }
 
-    inline fun onSuccess(action: (T) -> Unit): Result<T, E> {
+    inline fun onSuccess(action: (T) -> Unit): Outcome<T, E> {
         if (this is Success) action(value)
         return this
     }
 
-    inline fun onFailure(action: (E) -> Unit): Result<T, E> {
+    inline fun onFailure(action: (E) -> Unit): Outcome<T, E> {
         if (this is Failure) action(error)
         return this
     }

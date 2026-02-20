@@ -42,8 +42,8 @@ class UserRepositoryImpl : UserRepository {
         Users.insert {
               it[email] = user.email
               it[passwordHash] = user.passwordHash
-              it[name] = user.name
-              it[surname] = user.surname
+              it[firstName] = user.firstName
+              it[lastName] = user.lastName
               it[gender] = user.gender
               it[birthday] = user.birthday
               it[phone] = user.phone
@@ -56,8 +56,8 @@ class UserRepositoryImpl : UserRepository {
   override suspend fun updateUser(userId: Int, user: User): User? = dbQuery {
     val updated =
         Users.update(where = { Users.id eq userId }) {
-          it[name] = user.name
-          it[surname] = user.surname
+          it[firstName] = user.firstName
+          it[lastName] = user.lastName
           it[gender] = user.gender
           it[birthday] = user.birthday
           it[phone] = user.phone
@@ -78,8 +78,8 @@ class UserRepositoryImpl : UserRepository {
           id = this[Users.id],
           email = this[Users.email],
           passwordHash = this[Users.passwordHash],
-          name = this[Users.name],
-          surname = this[Users.surname],
+          firstName = this[Users.firstName],
+          lastName = this[Users.lastName],
           gender = this[Users.gender],
           birthday = this[Users.birthday],
           phone = this[Users.phone],

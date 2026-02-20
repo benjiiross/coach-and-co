@@ -1,6 +1,6 @@
 package com.benjiiross.coachandco.data.repository
 
-import com.benjiiross.coachandco.core.Result
+import com.benjiiross.coachandco.core.Outcome
 import com.benjiiross.coachandco.domain.enums.Gender
 import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.domain.error.AuthError
@@ -21,13 +21,11 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
-import kotlinx.datetime.LocalDate
-
 class AuthRepositoryImpl(
     private val client: HttpClient,
     private val baseUrl: String
 ) : AuthRepository {
-    override suspend fun login(authDetails: LoginRequest): Result<AuthResponse, AuthError> {
+    override suspend fun login(authDetails: LoginRequest): Outcome<AuthResponse, AuthError> {
         return try {
             val response: HttpResponse = client.post(Api.Auth.Login()) {
                 contentType(ContentType.Application.Json)
@@ -37,36 +35,36 @@ class AuthRepositoryImpl(
             when (response.status) {
                 HttpStatusCode.OK -> {
                     val authResponse = response.body<AuthResponse>()
-                    Result.Success(authResponse)
+                    Outcome.Success(authResponse)
                 }
                 HttpStatusCode.Unauthorized -> {
-                    Result.Failure(AuthError.InvalidCredentials)
+                    Outcome.Failure(AuthError.InvalidCredentials)
                 }
                 HttpStatusCode.InternalServerError -> {
-                    Result.Failure(AuthError.ServerError)
+                    Outcome.Failure(AuthError.ServerError)
                 }
                 else -> {
                     try {
                         val errorResponse = response.body<ApiErrorResponse>()
-                        Result.Failure(AuthError.Unknown(errorResponse.message))
+                        Outcome.Failure(AuthError.Unknown(errorResponse.message))
                     } catch (e: Exception) {
-                        Result.Failure(AuthError.Unknown("Unknown error occurred"))
+                        Outcome.Failure(AuthError.Unknown("Unknown error occurred"))
                     }
                 }
             }
         } catch (e: ClientRequestException) {
             when (e.response.status) {
-                HttpStatusCode.Unauthorized -> Result.Failure(AuthError.InvalidCredentials)
-                else -> Result.Failure(AuthError.Unknown(e.message ?: "Request failed"))
+                HttpStatusCode.Unauthorized -> Outcome.Failure(AuthError.InvalidCredentials)
+                else -> Outcome.Failure(AuthError.Unknown(e.message ?: "Request failed"))
             }
         } catch (e: ServerResponseException) {
-            Result.Failure(AuthError.ServerError)
+            Outcome.Failure(AuthError.ServerError)
         } catch (e: Exception) {
-            Result.Failure(AuthError.NetworkError)
+            Outcome.Failure(AuthError.NetworkError)
         }
     }
 
-    override suspend fun register(user: RegisterRequest): Result<AuthResponse, AuthError> {
+    override suspend fun register(user: RegisterRequest): Outcome<AuthResponse, AuthError> {
         return try {
             val response: HttpResponse = client.post("$baseUrl/auth/login") {
                 contentType(ContentType.Application.Json)
@@ -76,35 +74,35 @@ class AuthRepositoryImpl(
             when (response.status) {
                 HttpStatusCode.OK -> {
                     val authResponse = response.body<AuthResponse>()
-                    Result.Success(authResponse)
+                    Outcome.Success(authResponse)
                 }
 
                 HttpStatusCode.Unauthorized -> {
-                    Result.Failure(AuthError.InvalidCredentials)
+                    Outcome.Failure(AuthError.InvalidCredentials)
                 }
 
                 HttpStatusCode.InternalServerError -> {
-                    Result.Failure(AuthError.ServerError)
+                    Outcome.Failure(AuthError.ServerError)
                 }
 
                 else -> {
                     try {
                         val errorResponse = response.body<ApiErrorResponse>()
-                        Result.Failure(AuthError.Unknown(errorResponse.message))
+                        Outcome.Failure(AuthError.Unknown(errorResponse.message))
                     } catch (e: Exception) {
-                        Result.Failure(AuthError.Unknown("Unknown error occurred"))
+                        Outcome.Failure(AuthError.Unknown("Unknown error occurred"))
                     }
                 }
             }
         } catch (e: ClientRequestException) {
             when (e.response.status) {
-                HttpStatusCode.Conflict -> Result.Failure(AuthError.InvalidCredentials)
-                else -> Result.Failure(AuthError.Unknown(e.message ?: "Request failed"))
+                HttpStatusCode.Conflict -> Outcome.Failure(AuthError.InvalidCredentials)
+                else -> Outcome.Failure(AuthError.Unknown(e.message ?: "Request failed"))
             }
         } catch (e: ServerResponseException) {
-            Result.Failure(AuthError.ServerError)
+            Outcome.Failure(AuthError.ServerError)
         } catch (e: Exception) {
-            Result.Failure(AuthError.NetworkError)
+            Outcome.Failure(AuthError.NetworkError)
         }
     }
 }

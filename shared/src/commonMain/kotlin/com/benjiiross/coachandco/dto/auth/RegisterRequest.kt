@@ -9,8 +9,8 @@ import kotlinx.serialization.Serializable
 data class RegisterRequest(
     val email: String,
     val password: String,
-    val name: String,
-    val surname: String,
+    val firstName: String,
+    val lastName: String,
     val gender: Gender,
     val birthday: LocalDate,
     val phone: String,

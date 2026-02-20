@@ -7,16 +7,20 @@ import com.benjiiross.coachandco.dto.auth.UserResponse
 fun User.toResponse() = UserResponse(
     id = requireNotNull(this.id),
     email = this.email,
-    name = this.name,
-    surname = this.surname
+    firstName = this.firstName,
+    lastName = this.lastName,
+    gender = this.gender,
+    birthday = this.birthday,
+    phone = this.phone,
+    type = this.type,
 )
 
 fun User.toModel(): User =
     User(
         email = this.email,
         passwordHash = this.passwordHash,
-        name = this.name,
-        surname = this.surname,
+        firstName = this.firstName,
+        lastName = this.lastName,
         gender = this.gender,
         birthday = this.birthday,
         phone = this.phone,
@@ -27,8 +31,8 @@ fun RegisterRequest.toUser(hashedPw: String): User =
     User(
         email = this.email,
         passwordHash = hashedPw,
-        name = this.name,
-        surname = this.surname,
+        firstName = this.firstName,
+        lastName = this.lastName,
         gender = this.gender,
         birthday = this.birthday,
         phone = this.phone,
