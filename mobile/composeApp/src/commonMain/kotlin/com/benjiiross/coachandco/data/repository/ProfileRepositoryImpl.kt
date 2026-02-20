@@ -41,9 +41,9 @@ class ProfileRepositoryImpl(
                 HttpStatusCode.Unauthorized -> Outcome.Failure(ProfileError.Unauthorized)
                 else -> Outcome.Failure(ProfileError.Unknown(e.message))
             }
-        } catch (e: ServerResponseException) {
+        } catch (_: ServerResponseException) {
             Outcome.Failure(ProfileError.ServerError)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Outcome.Failure(ProfileError.NetworkError)
         }
     }
@@ -70,9 +70,9 @@ class ProfileRepositoryImpl(
                 HttpStatusCode.Unauthorized -> Outcome.Failure(ProfileError.Unauthorized)
                 else -> Outcome.Failure(ProfileError.Unknown(e.message))
             }
-        } catch (e: ServerResponseException) {
+        } catch (_: ServerResponseException) {
             Outcome.Failure(ProfileError.ServerError)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Outcome.Failure(ProfileError.NetworkError)
         }
     }

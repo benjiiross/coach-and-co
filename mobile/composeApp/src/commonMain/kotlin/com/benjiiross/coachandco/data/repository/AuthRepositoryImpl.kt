@@ -45,7 +45,7 @@ class AuthRepositoryImpl(
                     try {
                         val errorResponse = response.body<ApiErrorResponse>()
                         Outcome.Failure(AuthError.Unknown(errorResponse.message))
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         Outcome.Failure(AuthError.Unknown("Unknown error occurred"))
                     }
                 }
@@ -55,9 +55,9 @@ class AuthRepositoryImpl(
                 HttpStatusCode.Unauthorized -> Outcome.Failure(AuthError.InvalidCredentials)
                 else -> Outcome.Failure(AuthError.Unknown(e.message))
             }
-        } catch (e: ServerResponseException) {
+        } catch (_: ServerResponseException) {
             Outcome.Failure(AuthError.ServerError)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Outcome.Failure(AuthError.NetworkError)
         }
     }
