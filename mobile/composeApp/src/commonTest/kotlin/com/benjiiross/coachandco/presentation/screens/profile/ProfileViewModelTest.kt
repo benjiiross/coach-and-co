@@ -6,6 +6,7 @@ import com.benjiiross.coachandco.domain.enums.Gender
 import com.benjiiross.coachandco.dto.profile.ProfileError
 import com.benjiiross.coachandco.fakes.FakeProfileRepository
 import com.benjiiross.coachandco.fakes.fakeUserResponse
+import com.benjiiross.coachandco.presentation.UiMessage
 import com.benjiiross.coachandco.presentation.profile.ProfileViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,9 +19,9 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProfileViewModelTest {
@@ -64,14 +65,14 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun `loadProfile sets error on failure`() = runTest {
+    fun `loadProfile sets loadError on failure`() = runTest {
         fakeRepo.getProfileResult = Outcome.Failure(ProfileError.NetworkError)
         buildViewModel()
 
         viewModel.uiState.test {
             val state = awaitItem()
             assertFalse(state.isLoading)
-            assertNotNull(state.error)
+            assertNotNull(state.loadError)
             assertNull(state.profile)
         }
     }
@@ -84,7 +85,7 @@ class ProfileViewModelTest {
         buildViewModel()
 
         viewModel.uiState.test {
-            awaitItem() // loaded
+            awaitItem()
 
             viewModel.onFirstNameChange("Jane")
             val state = awaitItem()
@@ -185,17 +186,13 @@ class ProfileViewModelTest {
         fakeRepo.updateProfileResult = Outcome.Success(fakeUserResponse)
         buildViewModel()
 
-        viewModel.uiState.test {
-            awaitItem()
+        viewModel.onBirthdayChange("2000-06-15")
+        viewModel.saveProfile()
 
-            viewModel.onBirthdayChange("1990-01-01")
-            awaitItem()
-
-            viewModel.saveProfile()
-            val state = awaitItem() // saving or success (unconfined runs eagerly)
-
-            assertNull(state.birthdayError)
-        }
+        // With UnconfinedTestDispatcher saveProfile() completes synchronously.
+        // The final state equals the pre-save state (same profile returned by fake repo),
+        // so StateFlow emits no new distinct value — check the current value directly.
+        assertNull(viewModel.uiState.value.birthdayError)
     }
 
     @Test
@@ -208,7 +205,6 @@ class ProfileViewModelTest {
 
             viewModel.onNewPasswordChange("newpassword")
             awaitItem()
-            // currentPassword left blank
 
             viewModel.saveProfile()
             val state = awaitItem()
@@ -264,60 +260,37 @@ class ProfileViewModelTest {
     // ── saveProfile success / failure ─────────────────────────────────────────
 
     @Test
-    fun `saveProfile sets saveSuccess and clears password fields on success`() = runTest {
+    fun `saveProfile emits success message and clears password fields`() = runTest {
         fakeRepo.getProfileResult = Outcome.Success(fakeUserResponse)
         fakeRepo.updateProfileResult = Outcome.Success(fakeUserResponse)
         buildViewModel()
 
-        viewModel.uiState.test {
-            awaitItem()
-
+        viewModel.messages.test {
             viewModel.saveProfile()
-            val state = awaitItem()
-
-            assertTrue(state.saveSuccess)
-            assertEquals("", state.currentPassword)
-            assertEquals("", state.newPassword)
-            assertEquals("", state.confirmPassword)
+            val message = awaitItem()
+            assertIs<UiMessage.Success>(message)
+            cancelAndIgnoreRemainingEvents()
         }
+
+        val state = viewModel.uiState.value
+        assertEquals("", state.currentPassword)
+        assertEquals("", state.newPassword)
+        assertEquals("", state.confirmPassword)
     }
 
     @Test
-    fun `saveProfile sets error on failure`() = runTest {
+    fun `saveProfile emits error message on failure`() = runTest {
         fakeRepo.getProfileResult = Outcome.Success(fakeUserResponse)
         fakeRepo.updateProfileResult = Outcome.Failure(ProfileError.ServerError)
         buildViewModel()
 
-        viewModel.uiState.test {
-            awaitItem()
-
+        viewModel.messages.test {
             viewModel.saveProfile()
-            val state = awaitItem()
-
-            assertFalse(state.isSaving)
-            assertNotNull(state.error)
+            val message = awaitItem()
+            assertIs<UiMessage.Error>(message)
+            cancelAndIgnoreRemainingEvents()
         }
-    }
 
-    // ── onSnackbarConsumed ────────────────────────────────────────────────────
-
-    @Test
-    fun `onSnackbarConsumed clears saveSuccess and error`() = runTest {
-        fakeRepo.getProfileResult = Outcome.Success(fakeUserResponse)
-        fakeRepo.updateProfileResult = Outcome.Success(fakeUserResponse)
-        buildViewModel()
-
-        viewModel.uiState.test {
-            awaitItem()
-
-            viewModel.saveProfile()
-            awaitItem() // saveSuccess = true
-
-            viewModel.onSnackbarConsumed()
-            val state = awaitItem()
-
-            assertFalse(state.saveSuccess)
-            assertNull(state.error)
-        }
+        assertFalse(viewModel.uiState.value.isSaving)
     }
 }

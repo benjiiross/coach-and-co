@@ -50,7 +50,7 @@ class ProfileRepositoryImplTest {
 
         val result = repo.getProfile()
 
-        assertIs<Outcome.Success<UserResponse, ProfileError>>(result)
+        assertIs<Outcome.Success<UserResponse>>(result)
         assertEquals("user@test.com", result.value.email)
     }
 
@@ -61,7 +61,7 @@ class ProfileRepositoryImplTest {
 
         val result = repo.getProfile()
 
-        assertIs<Outcome.Failure<UserResponse, ProfileError>>(result)
+        assertIs<Outcome.Failure<ProfileError>>(result)
         assertEquals(ProfileError.Unauthorized, result.error)
     }
 
@@ -72,7 +72,7 @@ class ProfileRepositoryImplTest {
 
         val result = repo.getProfile()
 
-        assertIs<Outcome.Failure<UserResponse, ProfileError>>(result)
+        assertIs<Outcome.Failure<ProfileError>>(result)
         assertEquals(ProfileError.NotFound, result.error)
     }
 
@@ -83,7 +83,7 @@ class ProfileRepositoryImplTest {
 
         val result = repo.getProfile()
 
-        assertIs<Outcome.Failure<UserResponse, ProfileError>>(result)
+        assertIs<Outcome.Failure<ProfileError>>(result)
         assertEquals(ProfileError.ServerError, result.error)
     }
 
@@ -94,7 +94,7 @@ class ProfileRepositoryImplTest {
 
         val result = repo.getProfile()
 
-        assertIs<Outcome.Failure<UserResponse, ProfileError>>(result)
+        assertIs<Outcome.Failure<ProfileError>>(result)
         assertEquals(ProfileError.NetworkError, result.error)
     }
 
@@ -109,7 +109,7 @@ class ProfileRepositoryImplTest {
 
         val result = repo.updateProfile(UpdateProfileRequest(firstName = "John", lastName = "Doe"))
 
-        assertIs<Outcome.Success<UserResponse, ProfileError>>(result)
+        assertIs<Outcome.Success<UserResponse>>(result)
         assertEquals(1, result.value.id)
     }
 
@@ -120,7 +120,7 @@ class ProfileRepositoryImplTest {
 
         val result = repo.updateProfile(UpdateProfileRequest(firstName = "John", lastName = "Doe"))
 
-        assertIs<Outcome.Failure<UserResponse, ProfileError>>(result)
+        assertIs<Outcome.Failure<ProfileError>>(result)
         assertEquals(ProfileError.Unauthorized, result.error)
     }
 
@@ -131,7 +131,7 @@ class ProfileRepositoryImplTest {
 
         val result = repo.updateProfile(UpdateProfileRequest(firstName = "John", lastName = "Doe"))
 
-        assertIs<Outcome.Failure<UserResponse, ProfileError>>(result)
+        assertIs<Outcome.Failure<ProfileError>>(result)
         assertEquals(ProfileError.NetworkError, result.error)
     }
 }

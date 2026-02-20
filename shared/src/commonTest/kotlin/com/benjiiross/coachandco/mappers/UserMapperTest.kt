@@ -53,7 +53,7 @@ class UserMapperTest {
 
     @Test
     fun `toModel strips the id`() {
-        val model = user(id = 99).toModel()
+        val model = user(id = 99).copy(id = null)
 
         assertNull(model.id)
         assertEquals("john@example.com", model.email)

@@ -56,7 +56,7 @@ class AuthRepositoryImplTest {
 
         val result = repo.login(LoginRequest("user@test.com", "password"))
 
-        assertIs<Outcome.Success<AuthResponse, AuthError>>(result)
+        assertIs<Outcome.Success<AuthResponse>>(result)
         assertEquals("fake.token", result.value.token)
     }
 
@@ -69,7 +69,7 @@ class AuthRepositoryImplTest {
 
         val result = repo.login(LoginRequest("user@test.com", "wrong"))
 
-        assertIs<Outcome.Failure<AuthResponse, AuthError>>(result)
+        assertIs<Outcome.Failure<AuthError>>(result)
         assertEquals(AuthError.InvalidCredentials, result.error)
     }
 
@@ -82,7 +82,7 @@ class AuthRepositoryImplTest {
 
         val result = repo.login(LoginRequest("user@test.com", "password"))
 
-        assertIs<Outcome.Failure<AuthResponse, AuthError>>(result)
+        assertIs<Outcome.Failure<AuthError>>(result)
         assertEquals(AuthError.ServerError, result.error)
     }
 
@@ -93,7 +93,7 @@ class AuthRepositoryImplTest {
 
         val result = repo.login(LoginRequest("user@test.com", "password"))
 
-        assertIs<Outcome.Failure<AuthResponse, AuthError>>(result)
+        assertIs<Outcome.Failure<AuthError>>(result)
         assertEquals(AuthError.NetworkError, result.error)
     }
 
@@ -114,7 +114,7 @@ class AuthRepositoryImplTest {
 
         val result = repo.register(request)
 
-        assertIs<Outcome.Success<AuthResponse, AuthError>>(result)
+        assertIs<Outcome.Success<AuthResponse>>(result)
         assertTrue(result.isSuccess)
     }
 
@@ -133,7 +133,7 @@ class AuthRepositoryImplTest {
 
         val result = repo.register(request)
 
-        assertIs<Outcome.Failure<AuthResponse, AuthError>>(result)
+        assertIs<Outcome.Failure<AuthError>>(result)
         assertEquals(AuthError.InvalidCredentials, result.error)
     }
 
@@ -150,7 +150,7 @@ class AuthRepositoryImplTest {
 
         val result = repo.register(request)
 
-        assertIs<Outcome.Failure<AuthResponse, AuthError>>(result)
+        assertIs<Outcome.Failure<AuthError>>(result)
         assertEquals(AuthError.NetworkError, result.error)
     }
 }

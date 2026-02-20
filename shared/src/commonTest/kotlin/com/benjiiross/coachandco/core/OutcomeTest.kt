@@ -33,7 +33,7 @@ class OutcomeTest {
 
     @Test
     fun `getOrNull returns null for Failure`() {
-        assertNull(Outcome.Failure<Nothing, String>("err").getOrNull())
+        assertNull(Outcome.Failure("err").getOrNull())
     }
 
     // ── errorOrNull ───────────────────────────────────────────────────────────
@@ -45,7 +45,7 @@ class OutcomeTest {
 
     @Test
     fun `errorOrNull returns null for Success`() {
-        assertNull(Outcome.Success<Int, Nothing>(1).errorOrNull())
+        assertNull(Outcome.Success(1).errorOrNull())
     }
 
     // ── map ───────────────────────────────────────────────────────────────────
@@ -75,7 +75,7 @@ class OutcomeTest {
     @Test
     fun `onSuccess does not execute action for Failure`() {
         var called = false
-        Outcome.Failure<Int, String>("err").onSuccess { called = true }
+        Outcome.Failure("err").onSuccess { called = true }
         assertFalse(called)
     }
 

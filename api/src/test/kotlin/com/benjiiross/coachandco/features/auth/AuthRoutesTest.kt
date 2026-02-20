@@ -8,7 +8,6 @@ import com.benjiiross.coachandco.domain.enums.Gender
 import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.domain.model.User
 import com.benjiiross.coachandco.domain.services.AuthService
-import com.benjiiross.coachandco.dto.auth.AuthResponse
 import com.benjiiross.coachandco.dto.auth.LoginRequest
 import com.benjiiross.coachandco.dto.auth.RegisterRequest
 import com.benjiiross.coachandco.dto.auth.UserResponse
@@ -92,6 +91,7 @@ class AuthRoutesTest {
 
     private fun testApp(block: suspend io.ktor.server.testing.ApplicationTestBuilder.() -> Unit) =
         testApplication {
+            install(Resources)
             environment {
                 config = MapApplicationConfig(
                     "jwt.secret" to secret,
@@ -103,7 +103,6 @@ class AuthRoutesTest {
                 configureSerialization()
                 configureStatusPages()
                 configureSecurity(environment.config)
-                install(Resources)
                 routing { authRoutes() }
             }
             block()
