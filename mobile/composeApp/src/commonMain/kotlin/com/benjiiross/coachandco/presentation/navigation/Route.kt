@@ -16,6 +16,6 @@ sealed interface Route {
     sealed interface Main : Route {
         @Serializable data object Home : Main
 
-        @Serializable data class Profile(val userId: String) : Main
+        @Serializable data class Profile(val userId: Int) : Main
     }
 }
