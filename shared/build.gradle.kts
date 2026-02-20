@@ -35,7 +35,10 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.ktor.server.resources)
         }
-        commonTest.dependencies {}
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.datetime)
+        }
     }
 }
 
