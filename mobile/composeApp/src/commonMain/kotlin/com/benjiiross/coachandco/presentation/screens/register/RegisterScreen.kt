@@ -39,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import com.benjiiross.coachandco.domain.enums.Gender
-import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.presentation.UiMessage
 import com.benjiiross.coachandco.presentation.components.button.CoachAndCoButton
 import com.benjiiross.coachandco.presentation.components.button.CoachAndCoButtonVariant
@@ -88,7 +87,6 @@ fun RegisterScreen(
             onGenderChange = viewModel::onGenderChange,
             onBirthdayChange = viewModel::onBirthdayChange,
             onPhoneChange = viewModel::onPhoneChange,
-            onTypeChange = viewModel::onTypeChange,
             onRegister = viewModel::register,
             onNavigateLogin = onNavigateLogin,
             innerPadding = innerPadding,
@@ -114,7 +112,6 @@ private fun RegisterContent(
     onGenderChange: (Gender?) -> Unit,
     onBirthdayChange: (String) -> Unit,
     onPhoneChange: (String) -> Unit,
-    onTypeChange: (UserType) -> Unit,
     onRegister: () -> Unit,
     onNavigateLogin: () -> Unit,
     innerPadding: PaddingValues,
@@ -132,20 +129,6 @@ private fun RegisterContent(
         CoachAndCoTextBody(text = "Rejoignez Coach & Co dès aujourd'hui")
 
         Spacer(modifier = Modifier.height(Gaps.XL))
-
-        // ── Account type ──────────────────────────────────────────────────────
-
-        RegisterSectionTitle("Type de compte")
-
-        Spacer(modifier = Modifier.height(Gaps.SM))
-
-        UserTypeSelector(
-            selected = uiState.type,
-            onSelect = onTypeChange,
-            modifier = Modifier.fillMaxWidth(),
-        )
-
-        Spacer(modifier = Modifier.height(Gaps.L))
 
         // ── Identity ──────────────────────────────────────────────────────────
 
@@ -320,30 +303,6 @@ private fun GenderDropdown(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun UserTypeSelector(
-    selected: UserType,
-    onSelect: (UserType) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(Gaps.SM)) {
-        CoachAndCoButton(
-            text = "Client",
-            onClick = { onSelect(UserType.CLIENT) },
-            variant = if (selected == UserType.CLIENT) CoachAndCoButtonVariant.Primary
-            else CoachAndCoButtonVariant.Light,
-            modifier = Modifier.weight(1f),
-        )
-        CoachAndCoButton(
-            text = "Coach",
-            onClick = { onSelect(UserType.COACH) },
-            variant = if (selected == UserType.COACH) CoachAndCoButtonVariant.Primary
-            else CoachAndCoButtonVariant.Light,
-            modifier = Modifier.weight(1f),
-        )
     }
 }
 

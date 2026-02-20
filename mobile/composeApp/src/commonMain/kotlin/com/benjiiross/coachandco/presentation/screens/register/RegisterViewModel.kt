@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.benjiiross.coachandco.core.Outcome
 import com.benjiiross.coachandco.data.TokenStorage
 import com.benjiiross.coachandco.domain.enums.Gender
-import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.domain.error.AuthError
 import com.benjiiross.coachandco.domain.repository.AuthRepository
 import com.benjiiross.coachandco.dto.auth.RegisterRequest
@@ -28,7 +27,6 @@ data class RegisterUiState(
     val gender: Gender? = null,
     val birthday: String = "",
     val phone: String = "",
-    val type: UserType = UserType.CLIENT,
 
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,
@@ -78,9 +76,6 @@ class RegisterViewModel(
     fun onPhoneChange(value: String) =
         _uiState.update { it.copy(phone = value, phoneError = null) }
 
-    fun onTypeChange(value: UserType) =
-        _uiState.update { it.copy(type = value) }
-
     fun register() {
         if (!validate()) return
 
@@ -96,7 +91,6 @@ class RegisterViewModel(
                 gender = requireNotNull(state.gender),
                 birthday = LocalDate.parse(state.birthday.trim()),
                 phone = state.phone.trim(),
-                type = state.type,
             )
 
             when (val result = authRepository.register(request)) {

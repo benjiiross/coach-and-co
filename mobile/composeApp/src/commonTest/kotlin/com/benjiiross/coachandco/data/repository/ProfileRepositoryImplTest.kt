@@ -2,7 +2,6 @@ package com.benjiiross.coachandco.data.repository
 
 import com.benjiiross.coachandco.core.Outcome
 import com.benjiiross.coachandco.domain.enums.Gender
-import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.dto.auth.UserResponse
 import com.benjiiross.coachandco.dto.profile.ProfileError
 import com.benjiiross.coachandco.dto.profile.UpdateProfileRequest
@@ -29,7 +28,7 @@ class ProfileRepositoryImplTest {
 
     private val fakeUserResponse = UserResponse(
         id = 1, email = "user@test.com", firstName = "John", lastName = "Doe",
-        gender = Gender.MALE, birthday = birthday, phone = "0600000000", type = UserType.CLIENT,
+        gender = Gender.MALE, birthday = birthday, phone = "0600000000", isCoach = false,
     )
 
     private fun buildClient(engine: MockEngine) = HttpClient(engine) {

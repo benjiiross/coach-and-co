@@ -12,7 +12,7 @@ fun User.toResponse() = UserResponse(
     gender = this.gender,
     birthday = this.birthday,
     phone = this.phone,
-    type = this.type,
+    isCoach = this.isCoach,
 )
 
 fun RegisterRequest.toUser(hashedPw: String): User =
@@ -24,7 +24,7 @@ fun RegisterRequest.toUser(hashedPw: String): User =
         gender = this.gender,
         birthday = this.birthday,
         phone = this.phone,
-        type = this.type,
+        isCoach = false,
     )
 
 fun List<User>.toResponse() = map { it.toResponse() }

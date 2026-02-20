@@ -2,7 +2,6 @@ package com.benjiiross.coachandco.data.database.tables
 
 import com.benjiiross.coachandco.core.constants.DbConstants
 import com.benjiiross.coachandco.domain.enums.Gender
-import com.benjiiross.coachandco.domain.enums.UserType
 import org.jetbrains.exposed.v1.core.Table
 import org.jetbrains.exposed.v1.datetime.date
 import org.jetbrains.exposed.v1.datetime.datetime
@@ -16,9 +15,7 @@ object Users : Table("users") {
   val gender = enumerationByName("gender", DbConstants.GENDER_MAX_LENGTH, Gender::class)
   val birthday = date("birthday")
   val phone = varchar("phone", DbConstants.PHONE_MAX_LENGTH)
-  val type =
-      enumerationByName("user_type", DbConstants.TYPE_MAX_LENGTH, UserType::class)
-          .default(UserType.CLIENT)
+  val isCoach = bool("is_coach").default(false)
 
   val deletedAt = datetime("deleted_at").nullable()
 

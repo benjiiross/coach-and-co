@@ -1,7 +1,6 @@
 package com.benjiiross.coachandco.domain.services
 
 import com.benjiiross.coachandco.domain.enums.Gender
-import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.core.exceptions.EmailAlreadyTakenException
 import com.benjiiross.coachandco.core.exceptions.ResourceNotFoundException
 import com.benjiiross.coachandco.domain.model.User
@@ -29,7 +28,7 @@ class UserServiceTest {
           gender = Gender.MALE,
           birthday = LocalDate(1990, 1, 1),
           phone = "0600000000",
-          type = UserType.CLIENT,
+          isCoach = false,
       )
 
   @Test

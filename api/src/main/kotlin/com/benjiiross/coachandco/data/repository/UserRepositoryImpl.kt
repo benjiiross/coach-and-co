@@ -47,7 +47,7 @@ class UserRepositoryImpl : UserRepository {
               it[gender] = user.gender
               it[birthday] = user.birthday
               it[phone] = user.phone
-              it[type] = user.type
+              it[isCoach] = user.isCoach
             }[Users.id]
 
     user.copy(id = id)
@@ -83,6 +83,6 @@ class UserRepositoryImpl : UserRepository {
           gender = this[Users.gender],
           birthday = this[Users.birthday],
           phone = this[Users.phone],
-          type = this[Users.type],
+          isCoach = this[Users.isCoach],
       )
 }

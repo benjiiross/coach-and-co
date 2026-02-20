@@ -2,7 +2,6 @@ package com.benjiiross.coachandco.presentation.screens.register
 
 import com.benjiiross.coachandco.core.Outcome
 import com.benjiiross.coachandco.domain.enums.Gender
-import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.domain.error.AuthError
 import com.benjiiross.coachandco.fakes.FakeAuthRepository
 import com.benjiiross.coachandco.fakes.fakeAuthResponse
@@ -53,7 +52,6 @@ class RegisterViewModelTest {
         viewModel.onGenderChange(Gender.MALE)
         viewModel.onBirthdayChange("1990-01-01")
         viewModel.onPhoneChange("0600000000")
-        viewModel.onTypeChange(UserType.CLIENT)
     }
 
     // ── Initial state ──────────────────────────────────────────────────────────
@@ -69,7 +67,6 @@ class RegisterViewModelTest {
         assertNull(state.gender)
         assertEquals("", state.birthday)
         assertEquals("", state.phone)
-        assertEquals(UserType.CLIENT, state.type)
         assertFalse(state.isLoading)
         assertFalse(state.isSuccess)
         assertNull(state.emailError)
@@ -108,15 +105,6 @@ class RegisterViewModelTest {
             awaitItem()
             viewModel.onGenderChange(Gender.FEMALE)
             assertEquals(Gender.FEMALE, awaitItem().gender)
-        }
-    }
-
-    @Test
-    fun `onTypeChange updates type`() = runTest {
-        viewModel.uiState.test {
-            awaitItem()
-            viewModel.onTypeChange(UserType.COACH)
-            assertEquals(UserType.COACH, awaitItem().type)
         }
     }
 

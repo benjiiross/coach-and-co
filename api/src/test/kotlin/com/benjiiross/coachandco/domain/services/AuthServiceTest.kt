@@ -7,7 +7,6 @@ import com.benjiiross.coachandco.core.exceptions.EmailOrPasswordIncorrect
 import com.benjiiross.coachandco.core.exceptions.InvalidJWT
 import com.benjiiross.coachandco.core.exceptions.ResourceNotFoundException
 import com.benjiiross.coachandco.domain.enums.Gender
-import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.domain.model.User
 import com.benjiiross.coachandco.domain.repository.UserRepository
 import com.benjiiross.coachandco.dto.auth.RegisterRequest
@@ -47,7 +46,7 @@ class AuthServiceTest {
         gender = Gender.MALE,
         birthday = birthday,
         phone = "0600000000",
-        type = UserType.CLIENT,
+        isCoach = false,
     )
 
     // ── generateToken ─────────────────────────────────────────────────────────
@@ -130,7 +129,6 @@ class AuthServiceTest {
             gender = Gender.FEMALE,
             birthday = birthday,
             phone = "0700000000",
-            type = UserType.CLIENT,
         )
         val capturedUser = slot<User>()
         coEvery { repo.findByEmail(request.email) } returns null
@@ -151,7 +149,7 @@ class AuthServiceTest {
 
         assertFailsWith<EmailAlreadyTakenException> {
             service.register(
-                RegisterRequest("user@test.com", "pw", "A", "B", Gender.MALE, birthday, "0600000000", UserType.CLIENT)
+                RegisterRequest("user@test.com", "pw", "A", "B", Gender.MALE, birthday, "0600000000")
             )
         }
     }

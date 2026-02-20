@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.benjiiross.coachandco.core.exceptions.EmailAlreadyTakenException
 import com.benjiiross.coachandco.core.exceptions.EmailOrPasswordIncorrect
 import com.benjiiross.coachandco.domain.enums.Gender
-import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.domain.model.User
 import com.benjiiross.coachandco.domain.services.AuthService
 import com.benjiiross.coachandco.dto.auth.LoginRequest
@@ -59,7 +58,7 @@ class AuthRoutesTest {
         gender = Gender.MALE,
         birthday = birthday,
         phone = "0600000000",
-        type = UserType.CLIENT,
+        isCoach = false,
     )
 
     private val fakeUserResponse = UserResponse(
@@ -70,7 +69,7 @@ class AuthRoutesTest {
         gender = Gender.MALE,
         birthday = birthday,
         phone = "0600000000",
-        type = UserType.CLIENT,
+        isCoach = false,
     )
 
     private val fakeToken = JWT.create()
@@ -151,7 +150,6 @@ class AuthRoutesTest {
             gender = Gender.MALE,
             birthday = birthday,
             phone = "0600000000",
-            type = UserType.CLIENT,
         )
 
         val response = client.post("/auth/register") {
@@ -174,7 +172,6 @@ class AuthRoutesTest {
             gender = Gender.MALE,
             birthday = birthday,
             phone = "0600000000",
-            type = UserType.CLIENT,
         )
 
         val response = client.post("/auth/register") {

@@ -1,12 +1,12 @@
 package com.benjiiross.coachandco.mappers
 
 import com.benjiiross.coachandco.domain.enums.Gender
-import com.benjiiross.coachandco.domain.enums.UserType
 import com.benjiiross.coachandco.domain.model.User
 import com.benjiiross.coachandco.dto.auth.RegisterRequest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlinx.datetime.LocalDate
 
@@ -23,7 +23,7 @@ class UserMapperTest {
         gender = Gender.MALE,
         birthday = birthday,
         phone = "0600000000",
-        type = UserType.CLIENT,
+        isCoach = false,
     )
 
     // ── toResponse ────────────────────────────────────────────────────────────
@@ -39,7 +39,7 @@ class UserMapperTest {
         assertEquals(Gender.MALE, response.gender)
         assertEquals(birthday, response.birthday)
         assertEquals("0600000000", response.phone)
-        assertEquals(UserType.CLIENT, response.type)
+        assertFalse(response.isCoach)
     }
 
     @Test
@@ -74,7 +74,6 @@ class UserMapperTest {
             gender = Gender.FEMALE,
             birthday = birthday,
             phone = "0700000000",
-            type = UserType.COACH,
         )
 
         val user = request.toUser("hashed_value")
@@ -87,7 +86,7 @@ class UserMapperTest {
         assertEquals(Gender.FEMALE, user.gender)
         assertEquals(birthday, user.birthday)
         assertEquals("0700000000", user.phone)
-        assertEquals(UserType.COACH, user.type)
+        assertFalse(user.isCoach)
     }
 
     // ── List.toResponse ───────────────────────────────────────────────────────
