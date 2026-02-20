@@ -30,7 +30,7 @@ class UserService(private val userRepository: UserRepository) {
     val existing = userRepository.findByEmail(request.email)
     if (existing != null) throw EmailAlreadyTakenException()
 
-    val userModel = request.toModel()
+    val userModel = request.copy(id = null)
 
     return userRepository.createUser(userModel).toResponse()
   }

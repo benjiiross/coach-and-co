@@ -15,18 +15,6 @@ fun User.toResponse() = UserResponse(
     type = this.type,
 )
 
-fun User.toModel(): User =
-    User(
-        email = this.email,
-        passwordHash = this.passwordHash,
-        firstName = this.firstName,
-        lastName = this.lastName,
-        gender = this.gender,
-        birthday = this.birthday,
-        phone = this.phone,
-        type = this.type,
-    )
-
 fun RegisterRequest.toUser(hashedPw: String): User =
     User(
         email = this.email,
