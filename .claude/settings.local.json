@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(.gradlew:*)",
+      "Bash(gradlew.bat:*)",
+      "Bash(./gradlew :api:test:*)",
+      "Bash(./gradlew :mobile:composeApp:testDebugUnitTest:*)"
     ]
   }
 }
