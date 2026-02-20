@@ -11,10 +11,10 @@ import io.ktor.server.auth.authenticate
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.principal
 import io.ktor.server.request.receive
+import io.ktor.server.resources.get
+import io.ktor.server.resources.post
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
-import io.ktor.server.routing.post
 import org.koin.ktor.ext.inject
 
 fun Route.authRoutes() {
@@ -35,7 +35,7 @@ fun Route.authRoutes() {
         )
     }
 
-    post("/register") {
+    post<Api.Auth.Register> {
         val request = call.receive<RegisterRequest>()
 
         val user = authService.register(request)
@@ -48,13 +48,12 @@ fun Route.authRoutes() {
                 user = user.toResponse()
             )
         )
-
     }
 
-    post("/logout") { call.respond(HttpStatusCode.OK, mapOf("message" to "Logged out")) }
+    post<Api.Auth.Logout> { call.respond(HttpStatusCode.OK, mapOf("message" to "Logged out")) }
 
     authenticate("auth-jwt") {
-        get("/me") {
+        get<Api.Auth.Me> {
             val principal = call.principal<JWTPrincipal>()
 
             val user = authService.me(principal)

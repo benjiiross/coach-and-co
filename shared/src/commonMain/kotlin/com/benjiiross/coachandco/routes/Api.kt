@@ -1,17 +1,27 @@
 package com.benjiiross.coachandco.routes
 
-import com.benjiiross.coachandco.dto.auth.LoginRequest
 import io.ktor.resources.Resource
 import kotlinx.serialization.Serializable
 
-@Resource("/")
 @Serializable
 class Api {
-    @Resource("auth")
+    @Resource("/auth")
     @Serializable
     class Auth(val parent: Api = Api()) {
-        @Resource("login")
+        @Resource("/login")
         @Serializable
         class Login(val parent: Auth = Auth())
+
+        @Resource("/register")
+        @Serializable
+        class Register(val parent: Auth = Auth())
+
+        @Resource("/logout")
+        @Serializable
+        class Logout(val parent: Auth = Auth())
+
+        @Resource("/me")
+        @Serializable
+        class Me(val parent: Auth = Auth())
     }
 }
