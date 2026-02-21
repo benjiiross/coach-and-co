@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
 
 data class ProfileUiState(
     val isLoading: Boolean = false,
@@ -36,7 +35,6 @@ data class ProfileUiState(
 
     val firstNameError: String? = null,
     val lastNameError: String? = null,
-    val birthdayError: String? = null,
     val passwordError: String? = null,
 )
 
@@ -92,7 +90,7 @@ class ProfileViewModel(
         _uiState.update { it.copy(gender = value) }
 
     fun onBirthdayChange(value: String) =
-        _uiState.update { it.copy(birthday = value, birthdayError = null) }
+        _uiState.update { it.copy(birthday = value) }
 
     fun onPhoneChange(value: String) =
         _uiState.update { it.copy(phone = value) }
@@ -151,15 +149,6 @@ class ProfileViewModel(
         val firstNameError = if (state.firstName.isBlank()) "Le prénom est requis" else null
         val lastNameError = if (state.lastName.isBlank()) "Le nom est requis" else null
 
-        val birthdayError = if (state.birthday.isNotEmpty()) {
-            try {
-                LocalDate.parse(state.birthday)
-                null
-            } catch (e: Exception) {
-                "Format invalide (AAAA-MM-JJ)"
-            }
-        } else null
-
         val passwordError = if (state.newPassword.isNotEmpty()) {
             when {
                 state.currentPassword.isBlank() -> "Mot de passe actuel requis"
@@ -173,13 +162,11 @@ class ProfileViewModel(
             it.copy(
                 firstNameError = firstNameError,
                 lastNameError = lastNameError,
-                birthdayError = birthdayError,
                 passwordError = passwordError,
             )
         }
 
-        return firstNameError == null && lastNameError == null &&
-            birthdayError == null && passwordError == null
+        return firstNameError == null && lastNameError == null && passwordError == null
     }
 
     private fun ProfileError.toMessage(): String = when (this) {

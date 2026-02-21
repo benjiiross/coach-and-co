@@ -121,16 +121,7 @@ class RegisterViewModel(
         val firstNameError = if (s.firstName.isBlank()) "Le prénom est requis" else null
         val lastNameError = if (s.lastName.isBlank()) "Le nom est requis" else null
         val genderError = if (s.gender == null) "Le genre est requis" else null
-        val birthdayError = if (s.birthday.isBlank()) {
-            "La date de naissance est requise"
-        } else {
-            try {
-                LocalDate.parse(s.birthday.trim())
-                null
-            } catch (_: Exception) {
-                "Format invalide (AAAA-MM-JJ)"
-            }
-        }
+        val birthdayError = if (s.birthday.isBlank()) "La date de naissance est requise" else null
         val phoneError = if (s.phone.isBlank()) "Le téléphone est requis" else null
 
         _uiState.update {

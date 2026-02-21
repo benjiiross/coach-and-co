@@ -109,7 +109,7 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun `onBirthdayChange updates birthday and clears error`() = runTest {
+    fun `onBirthdayChange updates birthday`() = runTest {
         fakeRepo.getProfileResult = Outcome.Success(fakeUserResponse)
         buildViewModel()
 
@@ -120,7 +120,6 @@ class ProfileViewModelTest {
             val state = awaitItem()
 
             assertEquals("2000-06-15", state.birthday)
-            assertNull(state.birthdayError)
         }
     }
 
@@ -160,39 +159,6 @@ class ProfileViewModelTest {
 
             assertNotNull(state.lastNameError)
         }
-    }
-
-    @Test
-    fun `saveProfile sets birthdayError for invalid date format`() = runTest {
-        fakeRepo.getProfileResult = Outcome.Success(fakeUserResponse)
-        buildViewModel()
-
-        viewModel.uiState.test {
-            awaitItem()
-
-            viewModel.onBirthdayChange("not-a-date")
-            awaitItem()
-
-            viewModel.saveProfile()
-            val state = awaitItem()
-
-            assertNotNull(state.birthdayError)
-        }
-    }
-
-    @Test
-    fun `saveProfile accepts valid date format`() = runTest {
-        fakeRepo.getProfileResult = Outcome.Success(fakeUserResponse)
-        fakeRepo.updateProfileResult = Outcome.Success(fakeUserResponse)
-        buildViewModel()
-
-        viewModel.onBirthdayChange("2000-06-15")
-        viewModel.saveProfile()
-
-        // With UnconfinedTestDispatcher saveProfile() completes synchronously.
-        // The final state equals the pre-save state (same profile returned by fake repo),
-        // so StateFlow emits no new distinct value — check the current value directly.
-        assertNull(viewModel.uiState.value.birthdayError)
     }
 
     @Test

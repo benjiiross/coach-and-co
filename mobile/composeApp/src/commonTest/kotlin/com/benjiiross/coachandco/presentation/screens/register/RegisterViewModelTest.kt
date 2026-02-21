@@ -151,13 +151,6 @@ class RegisterViewModelTest {
     }
 
     @Test
-    fun `register sets birthdayError for invalid date format`() = runTest {
-        viewModel.onBirthdayChange("not-a-date")
-        viewModel.register()
-        assertNotNull(viewModel.uiState.value.birthdayError)
-    }
-
-    @Test
     fun `register sets phoneError when phone is blank`() = runTest {
         viewModel.onEmailChange("user@test.com")
         viewModel.onFirstNameChange("John")

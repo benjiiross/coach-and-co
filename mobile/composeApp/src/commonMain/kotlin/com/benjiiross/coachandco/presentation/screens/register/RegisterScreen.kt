@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cake
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -45,6 +44,7 @@ import com.benjiiross.coachandco.presentation.components.button.CoachAndCoButton
 import com.benjiiross.coachandco.presentation.components.layout.AppMessageBanner
 import com.benjiiross.coachandco.presentation.components.text.CoachAndCoTextBody
 import com.benjiiross.coachandco.presentation.components.text.CoachAndCoTextTitle
+import com.benjiiross.coachandco.presentation.components.textfield.CoachAndCoDatePickerField
 import com.benjiiross.coachandco.presentation.components.textfield.CoachAndCoTextField
 import com.benjiiross.coachandco.presentation.preview.Pixel9aPreview
 import com.benjiiross.coachandco.presentation.preview.ThemePreview
@@ -165,11 +165,10 @@ private fun RegisterContent(
 
         Spacer(modifier = Modifier.height(Gaps.M))
 
-        CoachAndCoTextField(
+        CoachAndCoDatePickerField(
             value = uiState.birthday,
             onValueChange = onBirthdayChange,
-            label = "Date de naissance (AAAA-MM-JJ)",
-            leadingIcon = Icons.Default.Cake,
+            label = "Date de naissance",
             error = uiState.birthdayError,
             modifier = Modifier.fillMaxWidth(),
         )

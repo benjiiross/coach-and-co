@@ -21,6 +21,7 @@ import com.benjiiross.coachandco.presentation.components.text.CoachAndCoTextBody
 import com.benjiiross.coachandco.presentation.components.text.CoachAndCoTextCaption
 import com.benjiiross.coachandco.presentation.components.text.CoachAndCoTextTitle
 import com.benjiiross.coachandco.presentation.components.text.CoachAndCoTextTitleSmall
+import com.benjiiross.coachandco.presentation.components.textfield.CoachAndCoDatePickerField
 import com.benjiiross.coachandco.presentation.components.textfield.CoachAndCoTextField
 import com.benjiiross.coachandco.presentation.profile.ProfileUiState
 import com.benjiiross.coachandco.presentation.profile.ProfileViewModel
@@ -139,14 +140,11 @@ private fun ProfileContent(
             modifier = Modifier.fillMaxWidth(),
         )
 
-        CoachAndCoTextField(
+        CoachAndCoDatePickerField(
             value = uiState.birthday,
             onValueChange = onBirthdayChange,
-            label = "Date de naissance (AAAA-MM-JJ)",
+            label = "Date de naissance",
             modifier = Modifier.fillMaxWidth(),
-            leadingIcon = Icons.Default.CalendarMonth,
-            error = uiState.birthdayError,
-            imeAction = ImeAction.Next,
         )
 
         CoachAndCoTextField(
